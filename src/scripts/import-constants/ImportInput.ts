@@ -11,4 +11,5 @@ export interface ImportElement {
 export interface ImportElementOption {
     definition: string;
     score: number;
+    nonConformity: string;
 }

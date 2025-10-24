@@ -20,13 +20,6 @@ export type Constant = {
     sharing?: object;
 };
 
-const MAJOR_NON_CONFORMITY_REGEX =
-    /^(This is a major nonconformity|This is a major non-conformity)./;
-
-function isMajorNonConformity(description: string): boolean {
-    return MAJOR_NON_CONFORMITY_REGEX.test(description);
-}
-
 export function buildConstants(
     importInput: ImportInput[],
     sharing: object | undefined
@@ -41,8 +34,8 @@ export function buildConstants(
                     code: code,
                     name: shortName,
                     shortName: shortName,
-                    description: option.definition.replace(MAJOR_NON_CONFORMITY_REGEX, "").trim(),
-                    value: isMajorNonConformity(option.definition) ? 1 : 0,
+                    description: option.definition,
+                    value: option.nonConformity.toUpperCase() === "YES" ? 1 : 0,
                     ...(sharing ? { sharing: sharing } : {}),
                 });
             }

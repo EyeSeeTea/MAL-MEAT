@@ -36,6 +36,7 @@ const mappings: Record<keyof Omit<ImportElement, "options">, string> = {
 const optionMappings: Record<keyof ImportElementOption, string> = {
     definition: "Report",
     score: "Score",
+    nonConformity: "NonConformity",
 } as const;
 
 function parseSheet(sheetName: string, data: unknown[]): ImportInput {
@@ -71,10 +72,11 @@ function mapRow(
     const option: ImportElementOption = {
         definition: String((data as any)[optionMappings.definition] || "").trim(),
         score: Number((data as any)[optionMappings.score] || 0),
+        nonConformity: String((data as any)[optionMappings.nonConformity] || "").trim(),
     };
-    if (!option.score || !option.definition) {
+    if (!option.score || !option.definition || !option.nonConformity) {
         throw new Error(
-            `Missing ${optionMappings.score} or ${optionMappings.definition} in sheet "${sheetName}"`
+            `Missing one of${Object.values(optionMappings).join(", ")} in sheet "${sheetName}"`
         );
     }
     if (Object.prototype.hasOwnProperty.call(data, mappings.constantCode)) {
