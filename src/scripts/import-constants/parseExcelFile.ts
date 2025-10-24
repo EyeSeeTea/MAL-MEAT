@@ -22,6 +22,9 @@ export async function parseExcelFile(filePath: string): Promise<ImportInput[]> {
 
     for (const sheetName of workbook.SheetNames) {
         const worksheet = workbook.Sheets[sheetName];
+        if (!worksheet) {
+            continue; // just to please TypeScript
+        }
         const data = XLSX.utils.sheet_to_json(worksheet);
 
         result.push(parseSheet(sheetName, data));
@@ -40,7 +43,7 @@ const optionMappings: Record<keyof ImportElementOption, string> = {
 } as const;
 
 function parseSheet(sheetName: string, data: unknown[]): ImportInput {
-    const programId = sheetName.split("-")[0].trim();
+    const programId = sheetName.split("-")[0]?.trim();
     if (!programId || !DHIS2_ID_REGEX.test(programId)) {
         throw new Error(
             `Invalid or missing programId in sheet name "${sheetName}". Expected format: "programId - Description" where programId is a valid DHIS2 ID.`
