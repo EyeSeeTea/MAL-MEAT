@@ -69,7 +69,8 @@
         "vite-bundle-visualizer": "^0",
         "vite-plugin-checker": "^0.6.2",
         "vite-plugin-node-stdlib-browser": "^0.2.1",
-        "vitest": "^0.32.2"
+        "vitest": "^0.32.2",
+        "xlsx": "^0.18.5"
     },
     "scripts": {
         "build-dependencies-visualizer": "vite-bundle-visualizer",
@@ -93,7 +94,7 @@
         "localize": "yarn update-po && d2-i18n-generate -l -n dhis2-skeleton-app -p ./i18n/ -o ./src/locales/",
         "update-po": "yarn extract-pot && find i18n/ -name '*.po' -exec msgmerge --backup=off -U {} i18n/en.pot \\;",
         "prepare": "husky install",
-        "script-example": "yarn run-script src/scripts/example.ts"
+        "import-constants": "yarn run-script src/scripts/import-constants.ts"
     },
     "manifest.webapp": {
         "name": "DHIS2 Skeleton App",

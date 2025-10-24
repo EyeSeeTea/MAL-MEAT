@@ -68,7 +68,44 @@ $ yarn localize
 
 ### Scripts
 
-Check the example script, entry `"script-example"`in `package.json`->scripts and `src/scripts/example.ts`.
+#### import-constants
+
+Creates and allows importing DHIS2 constants from an Excel file.
+Builds constants for each option of each question with:
+
+-   Code: `{constantCode}_{score}` (e.g., `MAL_MEAT_CM_CAPACITY_1`, `MAL_MEAT_CM_CAPACITY_2`)
+-   Value: Major non-conformities (identified by text starting with "This is a major nonconformity" or "This is a major non-conformity") are marked with value `1`, others with value `0`
+-   If constants already exist in DHIS2 (matched by code), they will be updated instead of creating duplicates
+
+##### Usage
+
+```bash
+yarn run import-constants <input-file> --dhis2-url <url> --dhis2-auth <auth> [options]
+```
+
+##### Arguments
+
+-   `input-file` (required): Path to the input Excel file (.xlsx, .xls, .xlsm, or .xlsb)
+
+##### Options
+
+-   `-u, --dhis2-url <url>`: DHIS2 base URL (e.g., `http://localhost:8080`)
+    -   Can also be set via `DHIS2_URL` environment variable
+-   `-a, --dhis2-auth <auth>`: DHIS2 authentication in format `USERNAME:PASSWORD`
+    -   Can also be set via `DHIS2_AUTH` environment variable
+-   `-p, --push`: Actually push changes to DHIS2. Without this flag, the script only simulates the process (dry-run mode)
+-   `-o, --output <file>`: Path to save the generated constants JSON file (ready to be imported into DHIS2)
+-   `-s, --sharing <file>`: Path to a JSON file containing sharing settings to apply to created constants
+
+##### Excel File Format
+
+The Excel file should follow this structure:
+
+-   **Sheet names**: Format should be `{programId} - {Description}`, where `programId` is a valid DHIS2 ID (11 characters, starting with a letter)
+-   **Columns**:
+    -   `Key`: Constant code prefix (e.g., `MAL_MEAT_CM_CAPACITY`)
+    -   `Report`: Definition/description of the option
+    -   `Score`: Numeric score value for the option
 
 ### Misc Notes
 
