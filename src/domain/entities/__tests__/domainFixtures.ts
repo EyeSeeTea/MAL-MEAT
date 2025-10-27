@@ -6,6 +6,23 @@ export function createDomain(): Domain {
         id: "domain123",
         type: "CM",
         name: "Health Domain",
+        audit: {
+            domain: {
+                id: "domain",
+                name: "Domain",
+                options: [],
+            },
+            level: {
+                id: "level1",
+                name: "Level 1",
+                options: [],
+            },
+            type: {
+                id: "type1",
+                name: "type 1",
+                options: [],
+            },
+        },
         questions: [createQuestion()],
     };
 }
