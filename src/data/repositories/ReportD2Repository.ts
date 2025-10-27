@@ -5,18 +5,36 @@ import { Report } from "$/domain/entities/Report";
 import { Future } from "$/domain/entities/generic/Future";
 import { Domain } from "$/domain/entities/Domain";
 import { D2EventSchema } from "@eyeseetea/d2-api";
+import { config } from "$/data/config";
 
 export class ReportD2Repository implements ReportRepository {
     constructor(private api: D2Api) {}
 
     get(filters: GetReportsFilters): FutureData<Report[]> {
         const domainProgramIds = filters.domains.map(domain => domain.id);
+        const orgUnitParams = filters.orgUnitId
+            ? { orgUnit: filters.orgUnitId, ouMode: "DESCENDANTS" as const }
+            : {};
+        const yearParams = filters.year
+            ? {
+                  occurredAfter: new Date(filters.year, 0, 1).toISOString().split("T")[0],
+                  occurredBefore: new Date(filters.year + 1, 0, 1).toISOString().split("T")[0],
+              }
+            : {};
+        const levelOfAuditParams = filters.levelOfAudit
+            ? {
+                  filter: `${config.auditQuestions.level}:in:${filters.levelOfAudit}`,
+              }
+            : {};
         const getPrograms$ = domainProgramIds.map(programId =>
             apiToFuture(
                 this.api.tracker.events.get({
                     fields: eventFields,
                     program: programId,
                     skipPaging: true,
+                    ...orgUnitParams,
+                    ...yearParams,
+                    ...levelOfAuditParams,
                 })
             )
         );
