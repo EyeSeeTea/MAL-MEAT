@@ -49,10 +49,17 @@ export class DomainD2Repository implements DomainRepository {
         if (!questionsSection) {
             throw new Error(`Questions section not found for domain type: ${domainType}`);
         }
+        const auditSection = domainData.programStages[0]?.programStageSections.find(
+            section => section.id === config.domains[domainType].stageSections.audit
+        );
+        if (!auditSection) {
+            throw new Error(`Questions section not found for domain type: ${domainType}`);
+        }
         return {
             id: domainData.id,
             name: domainData.name,
             type: domainType,
+            audit: this.buildAuditQuestions(auditSection.dataElements),
             questions: this.buildQuestions(questionsSection.dataElements, constants),
         };
     }
@@ -65,6 +72,32 @@ export class DomainD2Repository implements DomainRepository {
             throw new Error(`Domain configuration not found for program ID: ${programId}`);
         }
         return domainEntry[0] as DomainType;
+    }
+
+    private buildAuditQuestions(dataElements: D2DataElement[]): Domain["audit"] {
+        const obj = Object.fromEntries(
+            Object.entries(config.auditQuestions).map(([key, dataElementId]) => {
+                const dataElement = dataElements.find(de => de.id === dataElementId);
+                if (!dataElement) {
+                    throw new Error(
+                        `Audit question data element not found for ID: ${dataElementId}`
+                    );
+                }
+                return [
+                    key,
+                    {
+                        id: dataElement.id,
+                        name: dataElement.name,
+                        options: dataElement.optionSet.options.map(opt => ({
+                            id: opt.id,
+                            code: opt.code,
+                            name: opt.name,
+                        })),
+                    },
+                ];
+            })
+        );
+        return obj as Domain["audit"];
     }
 
     private buildQuestions(dataElements: D2DataElement[], constants: D2Constant[]): Question[] {

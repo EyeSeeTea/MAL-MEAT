@@ -1,3 +1,5 @@
 import { NamedRef } from "$/domain/entities/Ref";
 
-export type OrganisationUnit = NamedRef;
+export type OrganisationUnit = NamedRef & {
+    path: string;
+};

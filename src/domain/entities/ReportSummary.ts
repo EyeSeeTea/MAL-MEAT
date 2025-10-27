@@ -15,10 +15,10 @@ export class ReportSummary {
     constructor(report: Report) {
         this.report = report;
         this.id = report.id;
-        this.domain = report.auditDomain;
+        this.domain = report.domainName;
         this.date = report.date.toLocaleDateString();
         this.organisationUnitName = report.organisationUnit.name;
-        this.auditLevel = report.auditLevel;
+        this.auditLevel = report.audit.level.name;
         this.averageScore = this.calculateAverageScore();
         this.majorNonconformities = this.countMajorNonconformities();
     }

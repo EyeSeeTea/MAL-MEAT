@@ -1,4 +1,4 @@
-import { DomainType } from "$/domain/entities/Domain";
+import { Domain, DomainType } from "$/domain/entities/Domain";
 import { Id } from "$/domain/entities/Ref";
 
 interface DomainConfig {
@@ -13,6 +13,7 @@ interface DomainConfig {
 interface DataConfig {
     domains: Record<DomainType, DomainConfig>;
     codesPrefix: string;
+    auditQuestions: Record<keyof Domain["audit"], Id>;
 }
 
 const CMConfig: DomainConfig = {
@@ -39,4 +40,9 @@ export const config = {
         // Surveillance: SurveillanceConfig,
     },
     codesPrefix: "MAL_MEAT_",
+    auditQuestions: {
+        level: "I76Ac6JHjiE",
+        domain: "QPFTqn0TwYP",
+        type: "hu0n9bNPx50",
+    },
 } satisfies DataConfig;

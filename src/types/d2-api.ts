@@ -8,5 +8,6 @@ export type {
     SelectedPick,
     D2ProgramSchema,
     D2ConstantSchema,
+    D2OrganisationUnitSchema,
 } from "@eyeseetea/d2-api/2.41";
 export const getMockApi = getMockApiFromClass(D2Api);

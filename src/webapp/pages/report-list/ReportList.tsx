@@ -8,15 +8,19 @@ import { useReports } from "$/webapp/hooks/useReports";
 import { PageHeader } from "$/webapp/components/page-header/PageHeader";
 import { useHistory } from "react-router-dom";
 import { ReportSummary } from "$/domain/entities/ReportSummary";
+import { useDomainsContext } from "$/webapp/contexts/domains-context";
+
 import styled from "styled-components";
 
 export const ReportList: React.FC = () => {
     const history = useHistory();
     const { fetch, loading: loadingReports, reports } = useReports();
+    const { domains: allDomains, loading: loadingDomains } = useDomainsContext();
 
     React.useEffect(() => {
-        fetch();
-    }, [fetch]);
+        if (loadingDomains || allDomains.length === 0) return;
+        fetch({ domains: allDomains });
+    }, [fetch, allDomains, loadingDomains]);
 
     const summaries = React.useMemo(
         () => reports.map(report => new ReportSummary(report)),
@@ -43,6 +47,10 @@ export const ReportList: React.FC = () => {
             name: "domain" as const,
             text: i18n.t("Domain"),
             sortable: true,
+            getValue: (summary: ReportSummary) => {
+                const domain = allDomains.find(d => d.id === summary.report.domainId);
+                return domain?.name;
+            },
         },
         {
             name: "date" as const,

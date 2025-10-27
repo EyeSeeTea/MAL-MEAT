@@ -1,16 +1,16 @@
-import type { D2Api } from "$/types/d2-api";
+import type { D2Api, D2OrganisationUnitSchema, SelectedPick } from "$/types/d2-api";
 import { apiToFuture, FutureData } from "$/data/api-futures";
-import { ReportRepository } from "$/domain/repositories/ReportRepository";
+import { GetReportsFilters, ReportRepository } from "$/domain/repositories/ReportRepository";
 import { Report } from "$/domain/entities/Report";
-import { config } from "$/data/config";
 import { Future } from "$/domain/entities/generic/Future";
-import { Id } from "$/domain/entities/Ref";
+import { Domain } from "$/domain/entities/Domain";
+import { D2EventSchema } from "@eyeseetea/d2-api";
 
 export class ReportD2Repository implements ReportRepository {
     constructor(private api: D2Api) {}
 
-    get(): FutureData<Report[]> {
-        const domainProgramIds = Object.values(config.domains).map(domain => domain.programId);
+    get(filters: GetReportsFilters): FutureData<Report[]> {
+        const domainProgramIds = filters.domains.map(domain => domain.id);
         const getPrograms$ = domainProgramIds.map(programId =>
             apiToFuture(
                 this.api.tracker.events.get({
@@ -20,76 +20,87 @@ export class ReportD2Repository implements ReportRepository {
                 })
             )
         );
-        return Future.joinObj({
-            questionsDataElements: this.getQuestionsDataElements(),
-            eventResponses: Future.parallel(getPrograms$, { concurrency: 2 }),
-        }).map(({ questionsDataElements, eventResponses }) => {
-            return eventResponses.flatMap(d2Events =>
-                d2Events.instances.map(event => this.buildReport(event, questionsDataElements))
+        // TODO: find a better way to mix all the responses from separate programs with paging
+        // the api does not support filtering by multiple programs at once
+        return Future.parallel(getPrograms$, { concurrency: 2 }).flatMap(eventResponses => {
+            const orgUnitIds = eventResponses.flatMap(d2Events =>
+                d2Events.instances.map(e => e.orgUnit)
             );
+            const getOrgUnits$ = apiToFuture(
+                this.api.models.organisationUnits.get({
+                    fields: orgUnitFields,
+                    paging: false,
+                    filter: {
+                        id: {
+                            in: orgUnitIds,
+                        },
+                    },
+                })
+            );
+            return getOrgUnits$.flatMap(orgUnitsResponse => {
+                const reports = eventResponses.flatMap(d2Events => {
+                    return d2Events.instances.map(event =>
+                        this.buildReport(event, filters.domains, orgUnitsResponse.objects)
+                    );
+                });
+                return Future.success(reports);
+            });
         });
     }
 
-    private getQuestionsDataElements(): FutureData<DataElementsBySection> {
-        const programStageSectionIds = Object.values(config.domains).map(
-            domain => domain.stageSections.questions
-        );
-        return apiToFuture(
-            this.api.models.programStageSections.get({
-                paging: false,
-                fields: {
-                    id: true,
-                    dataElements: { id: true },
-                },
-                filter: {
-                    id: { in: programStageSectionIds },
-                },
-            })
-        ).map(response => {
-            return response.objects.reduce(
-                (result, next) => ({
-                    ...result,
-                    [next.id]: next.dataElements ? next.dataElements.map((de: any) => de.id) : [],
-                }),
-                {}
-            );
-        });
-    }
-
-    private buildReport(d2Event: any, questionDataElements: DataElementsBySection): Report {
-        const domainConfig = Object.values(config.domains).find(
-            domain => domain.programId === d2Event.program
-        );
-        if (!domainConfig) {
+    private buildReport(d2Event: D2Event, domains: Domain[], orgUnits: D2OrgUnit[]): Report {
+        const domain = domains.find(domain => domain.id === d2Event.program);
+        if (!domain) {
             throw new Error(`Unknown domain for program ID ${d2Event.program}`);
         }
-        const questionDataElementIds = questionDataElements[domainConfig.stageSections.questions];
-        if (!questionDataElementIds) {
-            throw new Error(
-                `No question data elements found for section ID ${domainConfig.stageSections.questions}`
-            );
+        const orgUnit = orgUnits.find(ou => ou.id === d2Event.orgUnit);
+        if (!orgUnit) {
+            throw new Error(`Organisation unit not found for ID ${d2Event.orgUnit}`);
         }
-        const questions = d2Event.dataValues.filter((dv: any) =>
-            questionDataElementIds.includes(dv.dataElement)
-        );
         return {
-            auditDomain: "",
-            auditLevel: "",
-            auditType: "",
+            domainName: domain.name,
+            audit: this.buildAudit(d2Event, domain),
             date: new Date(d2Event.occurredAt),
             domainId: d2Event.program,
             id: d2Event.event,
             organisationUnit: {
-                id: d2Event.orgUnit.id,
-                name: d2Event.orgUnit.name,
+                id: orgUnit.id,
+                name: orgUnit.name,
+                path: orgUnit.path,
             },
-            questions: questions.map((q: any) => {
+            questions: domain.questions.map(q => {
+                const dataValue = d2Event.dataValues.find((dv: any) => dv.dataElement === q.id);
+                if (!dataValue) {
+                    throw new Error(
+                        `Data value not found for question ID ${q.id} in event ${d2Event.event}`
+                    );
+                }
                 return {
-                    id: q.dataElement,
-                    value: q.value,
-                } as any;
+                    ...q,
+                    value: Number(dataValue.value),
+                };
             }),
         };
+    }
+
+    private buildAudit(d2Event: D2Event, domain: Domain): Report["audit"] {
+        return Object.fromEntries(
+            Object.entries(domain.audit).map(([key, question]) => {
+                const dataValue = d2Event.dataValues.find(dv => dv.dataElement === question.id);
+                if (!dataValue) {
+                    throw new Error(
+                        `Data value not found for audit question ID ${question.id} in event ${d2Event.event}`
+                    );
+                }
+                const option = question.options.find(opt => opt.code === dataValue.value);
+                if (!option) {
+                    throw new Error(
+                        `Option not found for audit question ID ${question.id} with value ${dataValue.value} in event ${d2Event.event}`
+                    );
+                }
+                return [key as keyof Report["audit"], option] as const;
+            })
+        ) as Report["audit"];
     }
 }
 
@@ -97,11 +108,22 @@ const eventFields = {
     program: true,
     programStage: true,
     event: true,
-    dataValues: true,
-    orgUnit: { id: true, name: true },
+    dataValues: { dataElement: true, value: true },
+    orgUnit: true,
+    orgUnitName: true,
     occurredAt: true,
     scheduledAt: true,
     status: true,
 } as const;
 
-type DataElementsBySection = Record<Id, Id[]>;
+const orgUnitFields = {
+    id: true,
+    name: true,
+    path: true,
+} as const;
+
+type D2Event = SelectedPick<D2EventSchema, typeof eventFields> & {
+    occurredAt: string;
+};
+
+type D2OrgUnit = SelectedPick<D2OrganisationUnitSchema, typeof orgUnitFields>;
