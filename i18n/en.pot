@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-27T13:56:44.295Z\n"
-"PO-Revision-Date: 2025-10-27T13:56:44.295Z\n"
+"POT-Creation-Date: 2025-10-27T17:09:05.055Z\n"
+"PO-Revision-Date: 2025-10-27T17:09:05.056Z\n"
 
 msgid "Add"
 msgstr ""
@@ -57,4 +57,7 @@ msgid "Show Detailed Report"
 msgstr ""
 
 msgid "Audit details"
+msgstr ""
+
+msgid "Error loading domains"
 msgstr ""

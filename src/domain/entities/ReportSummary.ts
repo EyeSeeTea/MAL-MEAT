@@ -18,7 +18,7 @@ export class ReportSummary {
         this.domain = report.domainName;
         this.date = report.date.toLocaleDateString();
         this.organisationUnitName = report.organisationUnit.name;
-        this.auditLevel = report.audit.level.name;
+        this.auditLevel = report.audit.level?.name ?? "";
         this.averageScore = this.calculateAverageScore();
         this.majorNonconformities = this.countMajorNonconformities();
     }

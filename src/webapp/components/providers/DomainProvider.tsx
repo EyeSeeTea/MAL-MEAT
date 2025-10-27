@@ -14,6 +14,7 @@ export const DomainsProvider: React.FC<DomainsProviderProps> = ({ children }) =>
     const [loading, setLoading] = React.useState<boolean>(true);
     React.useEffect(() => {
         setLoading(true);
+        setError(null);
         return compositionRoot.domains.getAll.execute().run(
             domains => {
                 setDomains(domains);

@@ -2,6 +2,7 @@ import { Option } from "$/domain/entities/Option";
 import { OrganisationUnit } from "$/domain/entities/OrganisationUnit";
 import { AnsweredQuestion } from "$/domain/entities/Question";
 import { Id } from "$/domain/entities/Ref";
+import { Maybe } from "$/utils/ts-utils";
 
 export interface Report {
     id: Id;
@@ -10,9 +11,9 @@ export interface Report {
     date: Date;
     organisationUnit: OrganisationUnit;
     audit: {
-        level: Option;
-        domain: Option;
-        type: Option;
+        level: Maybe<Option>;
+        domain: Maybe<Option>;
+        type: Maybe<Option>;
     };
     questions: AnsweredQuestion[];
 }

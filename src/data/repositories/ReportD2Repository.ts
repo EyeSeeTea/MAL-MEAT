@@ -71,9 +71,17 @@ export class ReportD2Repository implements ReportRepository {
             questions: domain.questions.map(q => {
                 const dataValue = d2Event.dataValues.find((dv: any) => dv.dataElement === q.id);
                 if (!dataValue) {
-                    throw new Error(
+                    // throw new Error(
+                    //     `Data value not found for question ID ${q.id} in event ${d2Event.event}`
+                    // );
+                    // TODO: DEFINE THIS BEHAVIOR
+                    console.warn(
                         `Data value not found for question ID ${q.id} in event ${d2Event.event}`
                     );
+                    return {
+                        ...q,
+                        value: 1,
+                    };
                 }
                 return {
                     ...q,
@@ -88,9 +96,7 @@ export class ReportD2Repository implements ReportRepository {
             Object.entries(domain.audit).map(([key, question]) => {
                 const dataValue = d2Event.dataValues.find(dv => dv.dataElement === question.id);
                 if (!dataValue) {
-                    throw new Error(
-                        `Data value not found for audit question ID ${question.id} in event ${d2Event.event}`
-                    );
+                    return [key as keyof Report["audit"], undefined] as const;
                 }
                 const option = question.options.find(opt => opt.code === dataValue.value);
                 if (!option) {

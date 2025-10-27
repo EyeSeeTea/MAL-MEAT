@@ -9,13 +9,18 @@ import { PageHeader } from "$/webapp/components/page-header/PageHeader";
 import { useHistory } from "react-router-dom";
 import { ReportSummary } from "$/domain/entities/ReportSummary";
 import { useDomainsContext } from "$/webapp/contexts/domains-context";
+import { NoticeBox } from "@dhis2/ui";
 
 import styled from "styled-components";
 
 export const ReportList: React.FC = () => {
     const history = useHistory();
     const { fetch, loading: loadingReports, reports } = useReports();
-    const { domains: allDomains, loading: loadingDomains } = useDomainsContext();
+    const {
+        domains: allDomains,
+        loading: loadingDomains,
+        error: domainsError,
+    } = useDomainsContext();
 
     React.useEffect(() => {
         if (loadingDomains || allDomains.length === 0) return;
@@ -107,6 +112,14 @@ export const ReportList: React.FC = () => {
     return (
         <Container>
             <PageHeader title={i18n.t("Audit details")} />
+            {domainsError && (
+                <NoticeBox title={i18n.t("Error loading domain configuration")} error>
+                    {i18n.t(
+                        "There was an error loading the domains. Please review the metadata configuration or contact support."
+                    )}
+                    <pre>{domainsError}</pre>
+                </NoticeBox>
+            )}
             <ObjectsTable<ReportSummary>
                 rows={summaries}
                 columns={columns}
