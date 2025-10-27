@@ -2868,10 +2868,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
-"@eyeseetea/d2-api@^1":
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/@eyeseetea/d2-api/-/d2-api-1.17.0.tgz#b04e3f5861519d6b6549587c5b1f8367613e242b"
-  integrity sha512-POr9vcVKoY6lLW3ZpNfi2ZfTBT9PjYjx9dKYFEDvGQBuXJu355yhhoWZ/HFEKYyaXyHmXNtALQki/kAFcJwoyw==
+"@eyeseetea/d2-api@^1.20.0":
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/@eyeseetea/d2-api/-/d2-api-1.20.0.tgz#2a0dd75bf922c0734f32d249d7df457756087d3f"
+  integrity sha512-/Toy/1sWB3eqlC+YGLk+KUIe1IJ+ws40aqk+SKBnBCtyNr6TK+AaQF+S+aXQPFJF7Nxnkki08tWvQTQjCdaOVw==
   dependencies:
     abort-controller "3.0.0"
     axios "1.6.4"

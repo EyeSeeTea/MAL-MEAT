@@ -14,6 +14,7 @@ import { Router } from "$/webapp/pages/Router";
 import "./App.css";
 import muiThemeLegacy from "./themes/dhis2-legacy.theme";
 import { muiTheme } from "./themes/dhis2.theme";
+import { DomainsProvider } from "$/webapp/components/providers/DomainProvider";
 
 type AppProps = {
     compositionRoot: CompositionRoot;
@@ -55,7 +56,9 @@ function App_(props: AppProps) {
 
                     <div id="app" className="content">
                         <AppContext.Provider value={appContext}>
-                            <Router />
+                            <DomainsProvider>
+                                <Router />
+                            </DomainsProvider>
                         </AppContext.Provider>
                     </div>
 
