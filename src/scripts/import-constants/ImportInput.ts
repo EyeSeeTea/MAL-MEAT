@@ -4,6 +4,7 @@ export interface ImportInput {
 }
 
 export interface ImportElement {
+    id: string;
     constantCode: string;
     options: ImportElementOption[];
 }

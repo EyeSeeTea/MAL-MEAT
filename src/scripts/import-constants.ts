@@ -3,6 +3,7 @@ import path from "path";
 import { D2Api } from "$/types/d2-api";
 import { parseExcelFile } from "./import-constants/parseExcelFile";
 import { buildConstants, importConstants } from "./import-constants/constants";
+import { getAndUpdateDataElements, importDataElements } from "./import-constants/dataElements";
 
 // This script is based in the import script from https://github.com/EyeSeeTea/extra-texts-for-options-capture-plugin/
 
@@ -42,8 +43,7 @@ function main() {
                 type: string,
                 long: "output",
                 short: "o",
-                description:
-                    "Output for generated constants file, ready to be imported into DHIS2.",
+                description: "Output for generated metadata file, ready to be imported into DHIS2.",
                 defaultValue: () => "",
             }),
             sharingSettingsFile: option({
@@ -72,6 +72,16 @@ function main() {
                 console.debug(`⬆️  Importing ${constants.length} constants to DHIS2...`);
                 await importConstants(api, constants);
                 console.debug("   ✓ Constants imported successfully");
+            }
+            const dataElements = await getAndUpdateDataElements(api, excelData);
+            console.debug(`🔧 Built ${dataElements.length} data elements with constant codes`);
+            if (args.outputFile) {
+                await saveJsonToFile({ constants, dataElements }, args.outputFile);
+            }
+            if (args.push) {
+                console.debug(`⬆️  Importing ${dataElements.length} dataElements to DHIS2...`);
+                await importDataElements(api, dataElements);
+                console.debug("   ✓ DataElements imported successfully");
             }
         },
     });

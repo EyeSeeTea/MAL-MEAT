@@ -33,6 +33,7 @@ export async function parseExcelFile(filePath: string): Promise<ImportInput[]> {
 }
 
 const mappings: Record<keyof Omit<ImportElement, "options">, string> = {
+    id: "QuestionUID",
     constantCode: "Key",
 } as const;
 
@@ -85,9 +86,14 @@ function mapRow(
     if (Object.prototype.hasOwnProperty.call(data, mappings.constantCode)) {
         const constantCode = String((data as any)[mappings.constantCode] || "").trim();
         if (!currentElement && !constantCode) {
-            throw new Error(`Missing Key in sheet "${sheetName}"`);
+            throw new Error(`Missing ${mappings.constantCode} in sheet "${sheetName}"`);
+        }
+        const id = String((data as any)[mappings.id] || "").trim();
+        if (!currentElement && !id) {
+            throw new Error(`Missing ${mappings.id} in sheet "${sheetName}"`);
         }
         return {
+            id: id,
             constantCode: constantCode,
             options: [option],
         };
