@@ -12,4 +12,5 @@ export type GetReportsFilters = {
 
 export interface ReportRepository {
     get(filters: GetReportsFilters): FutureData<Report[]>;
+    getById(reportId: Id, domains: Domain[]): FutureData<Report | null>;
 }

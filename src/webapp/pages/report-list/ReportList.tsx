@@ -59,7 +59,7 @@ export const ReportList: React.FC = () => {
 
     const showDetailedReport = (reportIds: string[]) => {
         if (reportIds.length !== 1) return;
-        history.push(`/report/${reportIds[0]}/detailed`);
+        history.push(`/details/${reportIds[0]}`);
     };
 
     const columns: TableColumn<ReportSummary>[] = [

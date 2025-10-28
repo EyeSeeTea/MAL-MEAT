@@ -10,6 +10,7 @@ import { ReportRepository } from "$/domain/repositories/ReportRepository";
 import { GetAllDomainsUseCase } from "$/domain/usecases/GetAllDomainsUseCase";
 import { GetOrganisationUnitsByIds } from "$/domain/usecases/GetOrganisationUnitsByIds";
 import { GetReportListUseCase } from "$/domain/usecases/GetReportListUseCase";
+import { GetReportWithPreviousUseCase } from "$/domain/usecases/GetReportWithPreviousUseCase";
 import { UserD2Repository } from "./data/repositories/UserD2Repository";
 import { UserTestRepository } from "./data/repositories/UserTestRepository";
 import { UserRepository } from "./domain/repositories/UserRepository";
@@ -32,6 +33,9 @@ function getCompositionRoot(repositories: Repositories) {
         },
         reports: {
             getList: new GetReportListUseCase({ reportRepository: repositories.reportRepository }),
+            getByIdWithPrevious: new GetReportWithPreviousUseCase({
+                reportRepository: repositories.reportRepository,
+            }),
         },
         domains: {
             getAll: new GetAllDomainsUseCase({

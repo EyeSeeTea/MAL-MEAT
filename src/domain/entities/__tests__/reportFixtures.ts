@@ -18,6 +18,14 @@ const baseReport: Report = {
     questions: [],
 };
 
+export function createReport(overrides?: Partial<Report>): Report {
+    return { ...baseReport, ...overrides };
+}
+
 export function createReportList(): Report[] {
-    return [{ ...baseReport }];
+    return [
+        createReport({ id: "report1" }),
+        createReport({ id: "report2" }),
+        createReport({ id: "report3" }),
+    ];
 }

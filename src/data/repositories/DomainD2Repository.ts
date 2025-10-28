@@ -87,7 +87,7 @@ export class DomainD2Repository implements DomainRepository {
                     key,
                     {
                         id: dataElement.id,
-                        name: dataElement.name,
+                        name: dataElement.formName,
                         options: dataElement.optionSet.options.map(opt => ({
                             id: opt.id,
                             code: opt.code,
@@ -121,7 +121,7 @@ export class DomainD2Repository implements DomainRepository {
 
             return {
                 id: de.id,
-                text: de.name,
+                text: de.formName,
                 options: options,
             } as Question;
         });
@@ -141,7 +141,7 @@ const programFields = {
             name: true,
             dataElements: {
                 id: true,
-                name: true,
+                formName: true,
                 code: true,
                 optionSet: { id: true, options: { id: true, name: true, code: true } },
             },

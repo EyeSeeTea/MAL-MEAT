@@ -7,6 +7,7 @@ import { Domain } from "$/domain/entities/Domain";
 import { D2EventSchema } from "@eyeseetea/d2-api";
 import { config } from "$/data/config";
 import { DHIS_OU_PATH_SEPARATOR } from "$/data/repositories/OrganisationUnitD2Repository";
+import { Id } from "$/domain/entities/Ref";
 
 export class ReportD2Repository implements ReportRepository {
     constructor(private api: D2Api) {}
@@ -27,7 +28,7 @@ export class ReportD2Repository implements ReportRepository {
                   filter: `${config.auditQuestions.level}:in:${filters.levelOfAudit}`,
               }
             : {};
-        const getPrograms$ = domainProgramIds.map(programId =>
+        const getEventsForPrograms$ = domainProgramIds.map(programId =>
             apiToFuture(
                 this.api.tracker.events.get({
                     fields: eventFields,
@@ -41,30 +42,52 @@ export class ReportD2Repository implements ReportRepository {
         );
         // TODO: find a better way to mix all the responses from separate programs with paging
         // the api does not support filtering by multiple programs at once
-        return Future.parallel(getPrograms$, { concurrency: 2 }).flatMap(eventResponses => {
-            const orgUnitIds = eventResponses.flatMap(d2Events =>
-                d2Events.instances.map(e => e.orgUnit)
-            );
-            const getOrgUnits$ = apiToFuture(
-                this.api.models.organisationUnits.get({
-                    fields: orgUnitFields,
-                    paging: false,
-                    filter: {
-                        id: {
-                            in: orgUnitIds,
-                        },
-                    },
-                })
-            );
-            return getOrgUnits$.flatMap(orgUnitsResponse => {
-                const reports = eventResponses.flatMap(d2Events => {
-                    return d2Events.instances.map(event =>
-                        this.buildReport(event, filters.domains, orgUnitsResponse.objects)
+        return Future.parallel(getEventsForPrograms$, { concurrency: 2 }).flatMap(
+            eventResponses => {
+                const d2Events = eventResponses.flatMap(r => r.instances);
+                return this.getOrgUnitsForEvents(d2Events).flatMap(d2OrgUnits => {
+                    const reports = d2Events.map(d2Event =>
+                        this.buildReport(d2Event, filters.domains, d2OrgUnits)
                     );
+                    return Future.success(reports);
                 });
-                return Future.success(reports);
+            }
+        );
+    }
+
+    getById(reportId: Id, domains: Domain[]): FutureData<Report | null> {
+        const getEvent$ = apiToFuture(
+            this.api.tracker.events.get({
+                fields: eventFields,
+                event: reportId,
+                skipPaging: true,
+            })
+        );
+        return getEvent$.flatMap(eventResponse => {
+            const d2Event = eventResponse.instances[0];
+            if (!d2Event) {
+                return Future.success(null);
+            }
+            return this.getOrgUnitsForEvents([d2Event]).flatMap(orgUnits => {
+                const report = this.buildReport(d2Event, domains, orgUnits);
+                return Future.success(report);
             });
         });
+    }
+
+    private getOrgUnitsForEvents(events: D2Event[]): FutureData<D2OrgUnit[]> {
+        const orgUnitIds = new Set(events.map(d2Event => d2Event.orgUnit));
+        return apiToFuture(
+            this.api.models.organisationUnits.get({
+                fields: orgUnitFields,
+                paging: false,
+                filter: {
+                    id: {
+                        in: Array.from(orgUnitIds),
+                    },
+                },
+            })
+        ).map(response => response.objects);
     }
 
     private buildReport(d2Event: D2Event, domains: Domain[], orgUnits: D2OrgUnit[]): Report {
