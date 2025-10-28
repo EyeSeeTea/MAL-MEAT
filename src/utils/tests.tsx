@@ -9,6 +9,7 @@ export function getTestContext() {
     const context: AppContextState = {
         currentUser: createAdminUser(),
         compositionRoot: getTestCompositionRoot(),
+        api: {} as any, // TODO: provide a mock D2Api if needed
     };
 
     return context;

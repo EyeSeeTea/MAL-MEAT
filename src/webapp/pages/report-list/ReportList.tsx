@@ -12,11 +12,15 @@ import { useReports } from "$/webapp/hooks/useReports";
 import { PageHeader } from "$/webapp/components/page-header/PageHeader";
 import { useDomainsContext } from "$/webapp/contexts/domains-context";
 import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
+import { ReportFilters } from "$/webapp/components/report-filters/ReportFilters";
+import { useReportFilters } from "$/webapp/hooks/useReportFilters";
+import { getIdFromPath } from "$/domain/entities/OrganisationUnit";
 
 export const ReportList: React.FC = () => {
     const history = useHistory();
     const getCaptureUrl = useGetCaptureUrl();
     const { fetch, loading: loadingReports, reports } = useReports();
+    const { filters, updateFilters, resetFilters } = useReportFilters();
     const {
         domains: allDomains,
         loading: loadingDomains,
@@ -25,8 +29,17 @@ export const ReportList: React.FC = () => {
 
     React.useEffect(() => {
         if (loadingDomains || allDomains.length === 0) return;
-        fetch({ domains: allDomains });
-    }, [fetch, allDomains, loadingDomains]);
+        const selectedDomains = filters.domainId
+            ? allDomains.filter(d => d.id === filters.domainId)
+            : allDomains;
+
+        fetch({
+            domains: selectedDomains,
+            orgUnitId: filters.orgUnitPath ? getIdFromPath(filters.orgUnitPath) : undefined,
+            year: filters.year,
+            levelOfAudit: filters.levelOfAudit,
+        });
+    }, [fetch, allDomains, loadingDomains, filters]);
 
     const summaries = React.useMemo(
         () => reports.map(report => new ReportSummary(report)),
@@ -122,11 +135,26 @@ export const ReportList: React.FC = () => {
                     <pre>{domainsError}</pre>
                 </NoticeBox>
             )}
+
             <ObjectsTable<ReportSummary>
                 rows={summaries}
                 columns={columns}
                 actions={actions}
                 loading={loadingReports}
+                filterComponents={
+                    <ReportFilters
+                        domains={allDomains}
+                        selectedDomainId={filters.domainId}
+                        selectedOrgUnit={filters.orgUnitPath}
+                        selectedYear={filters.year}
+                        selectedLevelOfAudit={filters.levelOfAudit}
+                        onDomainChange={domainId => updateFilters({ domainId })}
+                        onOrgUnitChange={orgUnitPath => updateFilters({ orgUnitPath })}
+                        onYearChange={year => updateFilters({ year })}
+                        onLevelOfAuditChange={levelOfAudit => updateFilters({ levelOfAudit })}
+                        onReset={resetFilters}
+                    />
+                }
             />
         </Container>
     );

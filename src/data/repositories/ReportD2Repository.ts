@@ -6,6 +6,7 @@ import { Future } from "$/domain/entities/generic/Future";
 import { Domain } from "$/domain/entities/Domain";
 import { D2EventSchema } from "@eyeseetea/d2-api";
 import { config } from "$/data/config";
+import { DHIS_OU_PATH_SEPARATOR } from "$/data/repositories/OrganisationUnitD2Repository";
 
 export class ReportD2Repository implements ReportRepository {
     constructor(private api: D2Api) {}
@@ -84,7 +85,7 @@ export class ReportD2Repository implements ReportRepository {
             organisationUnit: {
                 id: orgUnit.id,
                 name: orgUnit.name,
-                path: orgUnit.path,
+                path: orgUnit.path.split(DHIS_OU_PATH_SEPARATOR),
             },
             questions: domain.questions.map(q => {
                 const dataValue = d2Event.dataValues.find((dv: any) => dv.dataElement === q.id);

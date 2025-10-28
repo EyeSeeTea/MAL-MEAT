@@ -13,7 +13,7 @@ const baseReport: Report = {
     organisationUnit: {
         id: "",
         name: "",
-        path: "",
+        path: [""],
     },
     questions: [],
 };

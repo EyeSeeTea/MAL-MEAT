@@ -1,10 +1,14 @@
 import { DomainD2Repository } from "$/data/repositories/DomainD2Repository";
 import { DomainTestRepository } from "$/data/repositories/DomainTestRepository";
+import { OrganisationUnitD2Repository } from "$/data/repositories/OrganisationUnitD2Repository";
+import { OrganisationUniTestRepository } from "$/data/repositories/OrganisationUnitTestRepository";
 import { ReportD2Repository } from "$/data/repositories/ReportD2Repository";
 import { ReportTestRepository } from "$/data/repositories/ReportTestRepository";
 import { DomainRepository } from "$/domain/repositories/DomainRepository";
+import { OrganisationUnitRepository } from "$/domain/repositories/OrganisationUnitRepository";
 import { ReportRepository } from "$/domain/repositories/ReportRepository";
 import { GetAllDomainsUseCase } from "$/domain/usecases/GetAllDomainsUseCase";
+import { GetOrganisationUnitsByIds } from "$/domain/usecases/GetOrganisationUnitsByIds";
 import { GetReportListUseCase } from "$/domain/usecases/GetReportListUseCase";
 import { UserD2Repository } from "./data/repositories/UserD2Repository";
 import { UserTestRepository } from "./data/repositories/UserTestRepository";
@@ -18,6 +22,7 @@ type Repositories = {
     userRepository: UserRepository;
     reportRepository: ReportRepository;
     domainRepository: DomainRepository;
+    organisationUnitRepository: OrganisationUnitRepository;
 };
 
 function getCompositionRoot(repositories: Repositories) {
@@ -33,6 +38,11 @@ function getCompositionRoot(repositories: Repositories) {
                 domainRepository: repositories["domainRepository"],
             }),
         },
+        organisationUnits: {
+            getByIds: new GetOrganisationUnitsByIds({
+                organisationUnitRepository: repositories.organisationUnitRepository,
+            }),
+        },
     };
 }
 
@@ -41,6 +51,7 @@ export function getWebappCompositionRoot(api: D2Api) {
         userRepository: new UserD2Repository(api),
         reportRepository: new ReportD2Repository(api),
         domainRepository: new DomainD2Repository(api),
+        organisationUnitRepository: new OrganisationUnitD2Repository(api),
     };
 
     return getCompositionRoot(repositories);
@@ -51,6 +62,7 @@ export function getTestCompositionRoot() {
         userRepository: new UserTestRepository(),
         reportRepository: new ReportTestRepository(),
         domainRepository: new DomainTestRepository(),
+        organisationUnitRepository: new OrganisationUniTestRepository(),
     };
 
     return getCompositionRoot(repositories);
