@@ -1,20 +1,21 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 import { ObjectsTable, TableColumn, TableAction } from "@eyeseetea/d2-ui-components";
 import EditIcon from "@material-ui/icons/Edit";
 import DescriptionIcon from "@material-ui/icons/Description";
 import AssessmentIcon from "@material-ui/icons/Assessment";
+import { NoticeBox } from "@dhis2/ui";
 import i18n from "$/utils/i18n";
+import { ReportSummary } from "$/domain/entities/ReportSummary";
 import { useReports } from "$/webapp/hooks/useReports";
 import { PageHeader } from "$/webapp/components/page-header/PageHeader";
-import { useHistory } from "react-router-dom";
-import { ReportSummary } from "$/domain/entities/ReportSummary";
 import { useDomainsContext } from "$/webapp/contexts/domains-context";
-import { NoticeBox } from "@dhis2/ui";
-
-import styled from "styled-components";
+import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
 
 export const ReportList: React.FC = () => {
     const history = useHistory();
+    const getCaptureUrl = useGetCaptureUrl();
     const { fetch, loading: loadingReports, reports } = useReports();
     const {
         domains: allDomains,
@@ -33,8 +34,9 @@ export const ReportList: React.FC = () => {
     );
 
     const editReport = (reportIds: string[]) => {
-        if (reportIds.length !== 1) return;
-        history.push(`/report/${reportIds[0]}/edit`);
+        if (reportIds.length !== 1 || !reportIds[0]) return;
+        const captureUrl = getCaptureUrl(reportIds[0]);
+        window.open(captureUrl, "_blank");
     };
 
     const showSummaryReport = (reportIds: string[]) => {
