@@ -1,12 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2025-10-27T17:49:32.229Z\n"
+"POT-Creation-Date: 2025-10-28T16:54:41.603Z\n"
 "PO-Revision-Date: 2018-10-25T09:02:35.143Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgid "Current Response"
+msgstr ""
+
+msgid "Explanation"
+msgstr ""
+
+msgid "Previous Scores"
+msgstr ""
 
 msgid "Add"
 msgstr "Añadir"
@@ -14,11 +23,74 @@ msgstr "Añadir"
 msgid "List"
 msgstr "Listar"
 
+msgid "Loading..."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Select Organization Units"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
 msgid "Back"
 msgstr "Volver"
 
 msgid "Help"
 msgstr "Ayuda"
+
+msgid "Domain"
+msgstr ""
+
+msgid "All domains"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "All years"
+msgstr ""
+
+msgid "Level of Audit"
+msgstr ""
+
+msgid "All levels"
+msgstr ""
+
+msgid "Reset Filters"
+msgstr ""
+
+msgid "Loading report details..."
+msgstr ""
+
+msgid "Error loading summary"
+msgstr ""
+
+msgid "An error occurred while loading the report."
+msgstr ""
+
+msgid "Report not found"
+msgstr ""
+
+msgid "The requested report does not exist."
+msgstr ""
+
+msgid "Details for {{domain}}"
+msgstr ""
+
+msgid "Details"
+msgstr ""
 
 msgid "Hello {{name}}"
 msgstr "Hola {{name}}"
@@ -29,16 +101,10 @@ msgstr ""
 msgid "Section"
 msgstr "Sección"
 
-msgid "Domain"
-msgstr ""
-
 msgid "Report Date"
 msgstr ""
 
 msgid "Organization Unit"
-msgstr ""
-
-msgid "Level of Audit"
 msgstr ""
 
 msgid "Average Score"
