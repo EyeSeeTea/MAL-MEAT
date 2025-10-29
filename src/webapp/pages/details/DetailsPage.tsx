@@ -2,11 +2,10 @@ import { Id } from "$/domain/entities/Ref";
 import i18n from "$/utils/i18n";
 import { AnswerListWithScores } from "$/webapp/components/answer-scores/AnswerListWithScores";
 import { Layout } from "$/webapp/components/layout/Layout";
+import { Loading } from "$/webapp/components/loading/Loading";
 import { useReportWithPrevious } from "$/webapp/hooks/useReportWithPrevious";
 import { NoticeBox } from "@dhis2/ui";
-import { CircularProgress } from "@material-ui/core";
 import React from "react";
-import styled from "styled-components";
 
 export interface DetailsProps {
     reportId: Id;
@@ -18,10 +17,7 @@ export const DetailsPage: React.FC<DetailsProps> = ({ reportId }: DetailsProps) 
     if (loader.type === "loading") {
         return (
             <Layout title={defaultTitle} withGoBack>
-                <LoadingContainer>
-                    <CircularProgress size={60} thickness={4} />
-                    <LoadingText>{i18n.t("Loading report details...")}</LoadingText>
-                </LoadingContainer>
+                <Loading message={i18n.t("Loading report details...")} />
             </Layout>
         );
     }
@@ -54,18 +50,3 @@ export const DetailsPage: React.FC<DetailsProps> = ({ reportId }: DetailsProps) 
         );
     }
 };
-
-const LoadingContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 300px;
-    gap: 1.5rem;
-`;
-
-const LoadingText = styled.div`
-    font-size: 1.1rem;
-    color: #666;
-    font-weight: 500;
-`;
