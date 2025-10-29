@@ -16,6 +16,6 @@ export interface Domain {
     id: Id;
     type: DomainType;
     name: string;
-    audit: Record<"level" | "domain" | "type", ChoiceQuestion>;
+    audit: Record<"level" | "type", ChoiceQuestion>;
     questions: Question[];
 }

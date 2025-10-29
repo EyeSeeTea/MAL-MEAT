@@ -42,7 +42,6 @@ export const config = {
     codesPrefix: "MAL_MEAT_",
     auditQuestions: {
         level: "I76Ac6JHjiE",
-        domain: "QPFTqn0TwYP",
         type: "hu0n9bNPx50",
     },
 } satisfies DataConfig;

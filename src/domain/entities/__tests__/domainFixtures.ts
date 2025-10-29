@@ -7,11 +7,6 @@ export function createDomain(): Domain {
         type: "CM",
         name: "Health Domain",
         audit: {
-            domain: {
-                id: "domain",
-                name: "Domain",
-                options: [],
-            },
             level: {
                 id: "level1",
                 name: "Level 1",
