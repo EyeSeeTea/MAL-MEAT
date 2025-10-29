@@ -84,24 +84,24 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
                 </FilterControl>
 
                 <FilterControl>
-                    <InputLabel>{i18n.t("Year")}</InputLabel>
-                    <Select value={selectedYear ?? ""} onChange={handleYearChange}>
-                        <MenuItem value="">{i18n.t("All years")}</MenuItem>
-                        {yearOptions.map(year => (
-                            <MenuItem key={year} value={year}>
-                                {year}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FilterControl>
-
-                <FilterControl>
                     <InputLabel>{i18n.t("Level of Audit")}</InputLabel>
                     <Select value={selectedLevelOfAudit ?? ""} onChange={handleLevelOfAuditChange}>
                         <MenuItem value="">{i18n.t("All levels")}</MenuItem>
                         {auditLevelOptions.map(option => (
                             <MenuItem key={option.code} value={option.code}>
                                 {option.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FilterControl>
+
+                <FilterControl>
+                    <InputLabel>{i18n.t("Year")}</InputLabel>
+                    <Select value={selectedYear ?? ""} onChange={handleYearChange}>
+                        <MenuItem value="">{i18n.t("All years")}</MenuItem>
+                        {yearOptions.map(year => (
+                            <MenuItem key={year} value={year}>
+                                {year}
                             </MenuItem>
                         ))}
                     </Select>

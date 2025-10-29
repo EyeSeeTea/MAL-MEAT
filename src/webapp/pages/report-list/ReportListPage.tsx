@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
 import { ObjectsTable, TableColumn, TableAction } from "@eyeseetea/d2-ui-components";
 import EditIcon from "@material-ui/icons/Edit";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -9,14 +8,15 @@ import { NoticeBox } from "@dhis2/ui";
 import i18n from "$/utils/i18n";
 import { ReportSummary } from "$/domain/entities/ReportSummary";
 import { useReports } from "$/webapp/hooks/useReports";
-import { PageHeader } from "$/webapp/components/page-header/PageHeader";
 import { useDomainsContext } from "$/webapp/contexts/domains-context";
 import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
 import { ReportFilters } from "$/webapp/components/report-filters/ReportFilters";
 import { useReportFilters } from "$/webapp/hooks/useReportFilters";
 import { getIdFromPath } from "$/domain/entities/OrganisationUnit";
+import { Layout } from "$/webapp/components/layout/Layout";
 
-export const ReportList: React.FC = () => {
+export const ReportListPage: React.FC = () => {
+    const pageTitle = i18n.t("Audit details");
     const history = useHistory();
     const getCaptureUrl = useGetCaptureUrl();
     const { fetch, loading: loadingReports, reports } = useReports();
@@ -54,7 +54,9 @@ export const ReportList: React.FC = () => {
 
     const showSummaryReport = (reportIds: string[]) => {
         if (reportIds.length !== 1) return;
-        history.push(`/report/${reportIds[0]}/summary`);
+        const report = reports.find(r => r.id === reportIds[0]);
+        if (!report) return;
+        history.push(`/summary/${report.organisationUnit.id}`);
     };
 
     const showDetailedReport = (reportIds: string[]) => {
@@ -125,8 +127,7 @@ export const ReportList: React.FC = () => {
     ];
 
     return (
-        <Container>
-            <PageHeader title={i18n.t("Audit details")} />
+        <Layout title={pageTitle}>
             {domainsError && (
                 <NoticeBox title={i18n.t("Error loading domain configuration")} error>
                     {i18n.t(
@@ -156,10 +157,6 @@ export const ReportList: React.FC = () => {
                     />
                 }
             />
-        </Container>
+        </Layout>
     );
 };
-
-const Container = styled.div`
-    padding: 2rem;
-`;

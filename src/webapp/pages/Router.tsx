@@ -1,8 +1,9 @@
 import React from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { ExamplePage } from "./example/ExamplePage";
-import { ReportList } from "./report-list/ReportList";
-import { Details } from "$/webapp/pages/details/Details";
+import { ReportListPage } from "./report-list/ReportListPage";
+import { DetailsPage } from "$/webapp/pages/details/DetailsPage";
+import { SummaryPage } from "$/webapp/pages/summary/SummaryPage";
 
 export function Router() {
     return (
@@ -14,10 +15,14 @@ export function Router() {
                 />
                 <Route
                     path="/details/:reportId"
-                    render={({ match }) => <Details reportId={match.params.reportId} />}
+                    render={({ match }) => <DetailsPage reportId={match.params.reportId} />}
+                />
+                <Route
+                    path="/summary/:orgUnitId"
+                    render={({ match }) => <SummaryPage orgUnitId={match.params.orgUnitId} />}
                 />
                 {/* Default route */}
-                <Route render={() => <ReportList />} />
+                <Route render={() => <ReportListPage />} />
             </Switch>
         </HashRouter>
     );
