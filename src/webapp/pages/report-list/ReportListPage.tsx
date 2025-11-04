@@ -78,6 +78,9 @@ export const ReportListPage: React.FC = () => {
             name: "date" as const,
             text: i18n.t("Report Date"),
             sortable: true,
+            getValue: (summary: ReportSummary) => {
+                return summary.date;
+            },
         },
         {
             name: "organisationUnitName" as const,
@@ -93,6 +96,7 @@ export const ReportListPage: React.FC = () => {
             name: "averageScore" as const,
             text: i18n.t("Average Score"),
             sortable: true,
+            getValue: (summary: ReportSummary) => `${summary.averageScore.toFixed(2)} %`,
         },
         {
             name: "majorNonconformities" as const,
