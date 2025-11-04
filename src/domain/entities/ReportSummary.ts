@@ -16,7 +16,7 @@ export class ReportSummary {
         this.report = report;
         this.id = report.id;
         this.domain = report.domainName;
-        this.date = report.date.toLocaleDateString();
+        this.date = report.date.toISOString().slice(0, 10);
         this.organisationUnitName = report.organisationUnit.name;
         this.auditLevel = report.audit.level?.name ?? "";
         this.averageScore = this.calculateAverageScore();

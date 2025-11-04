@@ -1,9 +1,13 @@
 import { Id } from "$/domain/entities/Ref";
 import i18n from "$/utils/i18n";
+import { AveragesSummary } from "$/webapp/components/averages-summary/AveragesSummary";
 import { Layout } from "$/webapp/components/layout/Layout";
 import { Loading } from "$/webapp/components/loading/Loading";
+import { NonConformitiesSummary } from "$/webapp/components/non-conformities-summary/NonConformitiesSummary";
 import { useReportsByDomainForOrgUnit } from "$/webapp/hooks/useReportsByDomainForOrgUnit";
 import { NoticeBox } from "@dhis2/ui";
+import React from "react";
+import styled from "styled-components";
 
 export interface SummaryProps {
     orgUnitId: Id;
@@ -12,6 +16,12 @@ export interface SummaryProps {
 export const SummaryPage: React.FC<SummaryProps> = ({ orgUnitId }: SummaryProps) => {
     const defaultPageTitle = i18n.t("Summary");
     const { loader } = useReportsByDomainForOrgUnit(orgUnitId);
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleToggleExpanded = () => {
+        setExpanded(!expanded);
+    };
+
     if (loader.type === "loading") {
         return (
             <Layout title={defaultPageTitle} withGoBack>
@@ -36,14 +46,23 @@ export const SummaryPage: React.FC<SummaryProps> = ({ orgUnitId }: SummaryProps)
 
     return (
         <Layout title={pageTitle} withGoBack>
-            {value.list.map(summary => (
-                <div key={summary.domain.id}>
-                    <h2>{summary.domain.name}</h2>
-                    <p>
-                        {i18n.t("Number of reports {{count}}", { count: summary.reports.length })}
-                    </p>
-                </div>
-            ))}
+            <SummariesContainer>
+                <NonConformitiesSummary
+                    summary={value}
+                    expanded={expanded}
+                    onToggle={handleToggleExpanded}
+                />
+                <AveragesSummary
+                    summary={value}
+                    expanded={expanded}
+                    onToggle={handleToggleExpanded}
+                />
+            </SummariesContainer>
         </Layout>
     );
 };
+
+const SummariesContainer = styled.div`
+    display: flex;
+    gap: 1rem;
+`;

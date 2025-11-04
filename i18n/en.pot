@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-28T16:54:41.603Z\n"
-"PO-Revision-Date: 2025-10-28T16:54:41.603Z\n"
+"POT-Creation-Date: 2025-11-04T13:08:15.648Z\n"
+"PO-Revision-Date: 2025-11-04T13:08:15.649Z\n"
 
 msgid "Current Response"
 msgstr ""
@@ -56,16 +56,16 @@ msgstr ""
 msgid "All domains"
 msgstr ""
 
-msgid "Year"
-msgstr ""
-
-msgid "All years"
-msgstr ""
-
 msgid "Level of Audit"
 msgstr ""
 
 msgid "All levels"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "All years"
 msgstr ""
 
 msgid "Reset Filters"
@@ -89,9 +89,6 @@ msgstr ""
 msgid "Details for {{domain}}"
 msgstr ""
 
-msgid "Details"
-msgstr ""
-
 msgid "Hello {{name}}"
 msgstr ""
 
@@ -99,6 +96,9 @@ msgid "Detail page"
 msgstr ""
 
 msgid "Section"
+msgstr ""
+
+msgid "Audit details"
 msgstr ""
 
 msgid "Report Date"
@@ -122,13 +122,22 @@ msgstr ""
 msgid "Show Detailed Report"
 msgstr ""
 
-msgid "Audit details"
-msgstr ""
-
 msgid "Error loading domain configuration"
 msgstr ""
 
 msgid ""
 "There was an error loading the domains. Please review the metadata "
 "configuration or contact support."
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Loading summary..."
+msgstr ""
+
+msgid "An error occurred while loading the summary."
+msgstr ""
+
+msgid "Summary for {{orgUnitName}}"
 msgstr ""

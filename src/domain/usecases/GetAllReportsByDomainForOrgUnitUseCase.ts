@@ -2,16 +2,10 @@ import { FutureData } from "$/data/api-futures";
 import { Domain } from "$/domain/entities/Domain";
 import _c from "$/domain/entities/generic/Collection";
 import { Future } from "$/domain/entities/generic/Future";
-import { OrganisationUnit } from "$/domain/entities/OrganisationUnit";
+import { OrganisationUnitSummary } from "$/domain/entities/OrganisationUnitSummary";
 import { Id } from "$/domain/entities/Ref";
-import { Report } from "$/domain/entities/Report";
 import { OrganisationUnitRepository } from "$/domain/repositories/OrganisationUnitRepository";
 import { ReportRepository } from "$/domain/repositories/ReportRepository";
-
-type ReportsByDomain = {
-    domain: Domain;
-    reports: Report[];
-};
 
 export class GetAllReportsByDomainForOrgUnitUseCase {
     constructor(
@@ -24,7 +18,7 @@ export class GetAllReportsByDomainForOrgUnitUseCase {
     public execute(options: {
         domains: Domain[];
         orgUnitId: Id;
-    }): FutureData<{ organisationUnit: OrganisationUnit; list: ReportsByDomain[] }> {
+    }): FutureData<OrganisationUnitSummary> {
         return Future.joinObj({
             reports: this.options.reportRepository.get({ ...options, orgUnitMode: "SELECTED" }),
             organisationUnits: this.options.organisationUnitRepository.getByIds([
@@ -41,10 +35,7 @@ export class GetAllReportsByDomainForOrgUnitUseCase {
                     .filter(report => report.domainId === domain.id)
                     .toArray(),
             }));
-            return {
-                organisationUnit,
-                list,
-            };
+            return new OrganisationUnitSummary(organisationUnit, list);
         });
     }
 }
