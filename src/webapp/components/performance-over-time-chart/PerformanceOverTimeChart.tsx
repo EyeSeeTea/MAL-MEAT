@@ -32,6 +32,7 @@ export const PerformanceOverTimeChart: React.FC<PerformanceOverTimeChartProps> =
                 });
 
             return {
+                id: domain.id,
                 name: domain.name,
                 data: data,
             };
@@ -53,9 +54,9 @@ export const PerformanceOverTimeChart: React.FC<PerformanceOverTimeChartProps> =
                     <YAxis title={{ text: i18n.t("Average Score (%)") }} min={0} max={100} />
                     <Tooltip shared xDateFormat="%Y-%m-%d" valueSuffix="%" valueDecimals={2} />
                     <Credits enabled={false} />
-                    {seriesData.map((series, index) => (
+                    {seriesData.map(series => (
                         <Series
-                            key={index}
+                            key={series.id}
                             options={{ name: series.name }}
                             type="line"
                             data={series.data}
