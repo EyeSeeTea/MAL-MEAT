@@ -9,8 +9,9 @@ import {
 } from "@material-ui/core";
 import { ExpandMore as ExpandMoreIcon } from "@material-ui/icons";
 import styled from "styled-components";
-import { AnsweredQuestion, QuestionOption } from "$/domain/entities/Question";
+import { AnsweredQuestion } from "$/domain/entities/Question";
 import i18n from "$/utils/i18n";
+import { NumericBadge } from "$/webapp/components/numeric-badge/NumericBadge";
 
 export interface AnswerScoresProps {
     current: AnsweredQuestion;
@@ -40,11 +41,6 @@ export const AnswerScores: React.FC<AnswerScoresProps> = ({ current, previous })
         return date.toISOString().split("T")[0] as string;
     };
 
-    const getScoreColor = (option: QuestionOption): string => {
-        if (option.isMajorNonConformity) return "#f44336";
-        return "#607d8b";
-    };
-
     return (
         <Card elevation={3}>
             <CardContent>
@@ -53,9 +49,13 @@ export const AnswerScores: React.FC<AnswerScoresProps> = ({ current, previous })
                 </HeaderContainer>
 
                 <BodyContainer>
-                    <ScoreBadge color={getScoreColor(currentOption)}>
-                        <ScoreValue>{current.value}</ScoreValue>
-                    </ScoreBadge>
+                    <ScoreBadge
+                        value={current.value}
+                        valueFormatter={v => v?.toString() ?? ""}
+                        variantFormatter={() =>
+                            currentOption.isMajorNonConformity ? "red" : "blue"
+                        }
+                    />
                     <ResponseSection>
                         <SectionTitle variant="subtitle2">
                             {i18n.t("Current Response")}
@@ -93,10 +93,14 @@ export const AnswerScores: React.FC<AnswerScoresProps> = ({ current, previous })
                                                 hasExplanation={Boolean(prevOption.report)}
                                             >
                                                 <PreviousScoreBadge
-                                                    color={getScoreColor(prevOption)}
-                                                >
-                                                    {prev.question.value}
-                                                </PreviousScoreBadge>
+                                                    value={prev.question.value}
+                                                    valueFormatter={v => v?.toString() ?? ""}
+                                                    variantFormatter={() =>
+                                                        prevOption.isMajorNonConformity
+                                                            ? "red"
+                                                            : "blue"
+                                                    }
+                                                />
                                                 <PreviousScoreDetails>
                                                     <PreviousScoreDate>
                                                         {formatDate(prev.date)}
@@ -163,21 +167,15 @@ const QuestionTitle = styled(Typography)`
     flex: 1;
 `;
 
-const ScoreBadge = styled.div<{ color: string }>`
+const ScoreBadge = styled(NumericBadge)`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: ${props => props.color};
-    color: white;
     border-radius: 12px;
     padding: 0.25rem 0.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     min-width: 120px;
     flex-shrink: 0;
-`;
-
-const ScoreValue = styled.div`
     font-size: 3rem;
     font-weight: 700;
 `;
@@ -253,18 +251,17 @@ const PreviousScoreHeader = styled.div<{ hasExplanation: boolean }>`
     }
 `;
 
-const PreviousScoreBadge = styled.div<{ color: string }>`
+const PreviousScoreBadge = styled(NumericBadge)`
     min-width: 50px;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${props => props.color};
-    color: white;
     border-radius: 8px;
     font-size: 1.25rem;
     font-weight: 700;
     flex-shrink: 0;
+    padding: 0.5rem;
 `;
 
 const PreviousScoreDetails = styled.div`

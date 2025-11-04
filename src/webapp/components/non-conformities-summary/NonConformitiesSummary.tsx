@@ -9,7 +9,7 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import styled from "styled-components";
-import { NumericBadge } from "./NumericBadge";
+import { NonConformitiesBadge } from "$/webapp/components/numeric-badge/NonConformitiesBadge";
 
 export interface NonConformitiesSummaryProps {
     summary: OrganisationUnitSummary;
@@ -38,7 +38,7 @@ export const NonConformitiesSummary: React.FC<NonConformitiesSummaryProps> = ({
         <Card>
             <CardMain onClick={handleExpandClick}>
                 <MetricContainer>
-                    <NumericBadge value={summary.totalMajorNonconformities} large />
+                    <NonConformitiesBadge value={summary.totalMajorNonconformities} large />
                     <MetricLabel>{i18n.t("Total major non-conformities")}</MetricLabel>
                 </MetricContainer>
                 <ExpandIconContainer>
@@ -58,7 +58,7 @@ export const NonConformitiesSummary: React.FC<NonConformitiesSummaryProps> = ({
                         summary.latestReportByDomain.map(({ domain, report }) => {
                             return (
                                 <DomainSection key={domain.id}>
-                                    <NumericBadge value={report?.majorNonconformities} />
+                                    <NonConformitiesBadge value={report?.majorNonconformities} />
                                     <DomainName>
                                         {domain.name}
                                         {report?.date && <DateText> {report.date}</DateText>}

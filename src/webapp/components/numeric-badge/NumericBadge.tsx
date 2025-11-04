@@ -6,29 +6,23 @@ type NumericBadgeVariant = "blue" | "red" | "gray";
 export interface NumericBadgeProps {
     value?: number;
     large?: boolean;
-    valueFormatter?: (value?: number) => string;
-    variantFormatter?: (value?: number) => NumericBadgeVariant;
+    valueFormatter: (value?: number) => string;
+    variantFormatter: (value?: number) => NumericBadgeVariant;
+    className?: string;
 }
-
-const defaultValueFormatter = (value?: number): string => {
-    return value === undefined ? "N/A" : String(value);
-};
-
-const defaultVariantFormatter = (value?: number): NumericBadgeVariant => {
-    return value === undefined ? "gray" : value === 0 ? "blue" : "red";
-};
 
 export const NumericBadge: React.FC<NumericBadgeProps> = ({
     value,
     large = false,
-    valueFormatter = defaultValueFormatter,
-    variantFormatter = defaultVariantFormatter,
+    valueFormatter,
+    variantFormatter,
+    className,
 }) => {
     const displayValue = valueFormatter(value);
     const variant = variantFormatter(value);
 
     return (
-        <Badge variant={variant} large={large}>
+        <Badge variant={variant} large={large} className={className}>
             {displayValue}
         </Badge>
     );

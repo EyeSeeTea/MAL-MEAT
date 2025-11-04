@@ -9,21 +9,13 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import styled from "styled-components";
-import { NumericBadge } from "$/webapp/components/non-conformities-summary/NumericBadge";
+import { ScoreBadge } from "$/webapp/components/numeric-badge/ScoreBadge";
 
 export interface AveragesSummaryProps {
     summary: OrganisationUnitSummary;
     expanded?: boolean;
     onToggle?: () => void;
 }
-
-const numericValueFormatter = (value?: number): string => (value ? value.toFixed(2) : "N/A");
-const numericVariantFormatter = (value?: number): "blue" | "red" | "gray" => {
-    if (value === undefined) return "gray";
-    if (value >= 70) return "blue";
-    if (value >= 35) return "gray";
-    return "red";
-};
 
 export const AveragesSummary: React.FC<AveragesSummaryProps> = ({
     summary,
@@ -46,12 +38,7 @@ export const AveragesSummary: React.FC<AveragesSummaryProps> = ({
         <Card>
             <CardMain onClick={handleExpandClick}>
                 <MetricContainer>
-                    <NumericBadge
-                        value={summary.totalAverageScore}
-                        valueFormatter={numericValueFormatter}
-                        variantFormatter={numericVariantFormatter}
-                        large
-                    />
+                    <ScoreBadge value={summary.totalAverageScore} large />
                     <MetricLabel>{i18n.t("Average score")}</MetricLabel>
                 </MetricContainer>
                 <ExpandIconContainer>
@@ -71,11 +58,7 @@ export const AveragesSummary: React.FC<AveragesSummaryProps> = ({
                         summary.latestReportByDomain.map(({ domain, report }) => {
                             return (
                                 <DomainSection key={domain.id}>
-                                    <NumericBadge
-                                        value={report?.averageScore}
-                                        valueFormatter={numericValueFormatter}
-                                        variantFormatter={numericVariantFormatter}
-                                    />
+                                    <ScoreBadge value={report?.averageScore} />
                                     <DomainName>
                                         {domain.name}
                                         {report?.date && <DateText> {report.date}</DateText>}

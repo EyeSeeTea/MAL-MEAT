@@ -3,6 +3,7 @@ import i18n from "$/utils/i18n";
 import { AnswerListWithScores } from "$/webapp/components/answer-scores/AnswerListWithScores";
 import { Layout } from "$/webapp/components/layout/Layout";
 import { Loading } from "$/webapp/components/loading/Loading";
+import { ReportOverview } from "$/webapp/components/report-overview/ReportOverview";
 import { useReportWithPrevious } from "$/webapp/hooks/useReportWithPrevious";
 import { NoticeBox } from "@dhis2/ui";
 import React from "react";
@@ -45,6 +46,7 @@ export const DetailsPage: React.FC<DetailsProps> = ({ reportId }: DetailsProps) 
         const title = i18n.t("Details for {{domain}}", { domain: value.report.domainName });
         return (
             <Layout title={title} withGoBack>
+                <ReportOverview report={value.report} />
                 <AnswerListWithScores current={value.report} previous={value.previous} />
             </Layout>
         );
