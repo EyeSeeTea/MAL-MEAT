@@ -50,6 +50,7 @@ export class OrganisationUnitSummary {
         const reports = this.latestReportByDomain
             .map(({ report }) => report)
             .filter(report => report !== null);
+        if (reports.length === 0) return 0;
         const sum = reports.reduce((sum, report) => {
             const avg = report.averageScore;
             return sum + avg;
