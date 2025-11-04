@@ -2957,6 +2957,11 @@
     "@shikijs/types" "^3.2.2"
     "@shikijs/vscode-textmate" "^10.0.2"
 
+"@highcharts/react@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@highcharts/react/-/react-4.1.0.tgz#880d95367cabb32bccc9f714045339be70f9243c"
+  integrity sha512-sgGR8rAmx3tet8fP9bWUhVvt5nOuw6A0Ybby+q463g/9zQOmoA0wJ3TwLmKJm881UwN7++kkiMwoH4AeuMKsaQ==
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
@@ -6390,6 +6395,11 @@ hasown@^2.0.2:
   integrity sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==
   dependencies:
     function-bind "^1.1.2"
+
+highcharts@^12.4.0:
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-12.4.0.tgz#6bc0d551960e4e275d5a605e77b75625deeea225"
+  integrity sha512-o6UxxfChSUrvrZUbWrAuqL1HO/+exhAUPcZY6nnqLsadZQlnP16d082sg7DnXKZCk1gtfkyfkp6g3qkIZ9miZg==
 
 history@^4.9.0:
   version "4.10.1"

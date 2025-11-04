@@ -4,6 +4,7 @@ import { AveragesSummary } from "$/webapp/components/averages-summary/AveragesSu
 import { Layout } from "$/webapp/components/layout/Layout";
 import { Loading } from "$/webapp/components/loading/Loading";
 import { NonConformitiesSummary } from "$/webapp/components/non-conformities-summary/NonConformitiesSummary";
+import { PerformanceOverTimeChart } from "$/webapp/components/performance-over-time-chart/PerformanceOverTimeChart";
 import { useReportsByDomainForOrgUnit } from "$/webapp/hooks/useReportsByDomainForOrgUnit";
 import { NoticeBox } from "@dhis2/ui";
 import React from "react";
@@ -58,6 +59,7 @@ export const SummaryPage: React.FC<SummaryProps> = ({ orgUnitId }: SummaryProps)
                     onToggle={handleToggleExpanded}
                 />
             </SummariesContainer>
+            <PerformanceOverTimeChart summary={value} />
         </Layout>
     );
 };
