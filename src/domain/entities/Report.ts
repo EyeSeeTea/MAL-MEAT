@@ -12,7 +12,6 @@ export interface Report {
     organisationUnit: OrganisationUnit;
     audit: {
         level: Maybe<Option>;
-        domain: Maybe<Option>;
         type: Maybe<Option>;
     };
     questions: AnsweredQuestion[];

@@ -4,7 +4,6 @@ const baseReport: Report = {
     audit: {
         level: { id: "", name: "", code: "" },
         type: { id: "", name: "", code: "" },
-        domain: { id: "", name: "", code: "" },
     },
     date: new Date(),
     domainId: "",
