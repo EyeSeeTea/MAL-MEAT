@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-11-04T14:11:20.640Z\n"
-"PO-Revision-Date: 2025-11-04T14:11:20.640Z\n"
+"POT-Creation-Date: 2025-11-04T15:44:39.530Z\n"
+"PO-Revision-Date: 2025-11-04T15:44:39.530Z\n"
 
 msgid "Current Response"
 msgstr ""
@@ -65,6 +65,15 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
+msgid "Performance over time graph"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Average Score (%)"
+msgstr ""
+
 msgid "Domain"
 msgstr ""
 
@@ -84,6 +93,21 @@ msgid "All years"
 msgstr ""
 
 msgid "Reset Filters"
+msgstr ""
+
+msgid "Report Overview"
+msgstr ""
+
+msgid "Organisation Unit"
+msgstr ""
+
+msgid "Audit Level"
+msgstr ""
+
+msgid "Audit Type"
+msgstr ""
+
+msgid "Major non-conformities"
 msgstr ""
 
 msgid "Loading report details..."

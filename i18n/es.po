@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2025-11-04T14:11:20.640Z\n"
+"POT-Creation-Date: 2025-11-04T15:44:39.530Z\n"
 "PO-Revision-Date: 2018-10-25T09:02:35.143Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -65,6 +65,15 @@ msgstr "Volver"
 msgid "Help"
 msgstr "Ayuda"
 
+msgid "Performance over time graph"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Average Score (%)"
+msgstr ""
+
 msgid "Domain"
 msgstr ""
 
@@ -84,6 +93,21 @@ msgid "All years"
 msgstr ""
 
 msgid "Reset Filters"
+msgstr ""
+
+msgid "Report Overview"
+msgstr ""
+
+msgid "Organisation Unit"
+msgstr ""
+
+msgid "Audit Level"
+msgstr ""
+
+msgid "Audit Type"
+msgstr ""
+
+msgid "Major non-conformities"
 msgstr ""
 
 msgid "Loading report details..."
