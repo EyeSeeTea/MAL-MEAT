@@ -28,8 +28,12 @@ export function useLoader<Value>(
             value => setState({ type: "loaded", value }),
             err => {
                 const errorMessage = typeof err === "string" ? err : err.message;
-                snackbar.error(errorMessage);
-                setState({ type: "error", message: errorMessage });
+                const isAbortError = errorMessage.startsWith("AbortError");
+
+                if (!isAbortError) {
+                    snackbar.error(errorMessage);
+                    setState({ type: "error", message: errorMessage });
+                }
             }
         );
     }, [setState, snackbar, getter, compositionRoot, options.refreshKey]);
