@@ -15,12 +15,19 @@ export type UserRole = {
     authorities: string[];
 };
 
+const ADMIN_USER_GROUP_UID = "suMb19wGXPR";
+const VIEWER_USER_GROUP_UID = "OviFXqdot0H";
+
 export class User extends Struct<UserAttrs>() {
-    belongToUserGroup(userGroupUid: string): boolean {
+    belongToUserGroup(userGroupUid: Id): boolean {
         return this.userGroups.some(({ id }) => id === userGroupUid);
     }
 
     isAdmin(): boolean {
-        return this.userRoles.some(({ authorities }) => authorities.includes("ALL"));
+        return this.belongToUserGroup(ADMIN_USER_GROUP_UID);
+    }
+
+    isViewer(): boolean {
+        return this.belongToUserGroup(VIEWER_USER_GROUP_UID);
     }
 }

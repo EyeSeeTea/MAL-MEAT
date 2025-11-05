@@ -1,24 +1,18 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { ObjectsTable, TableColumn, TableAction } from "@eyeseetea/d2-ui-components";
-import EditIcon from "@material-ui/icons/Edit";
-import DescriptionIcon from "@material-ui/icons/Description";
-import AssessmentIcon from "@material-ui/icons/Assessment";
+import { ObjectsTable, TableColumn } from "@eyeseetea/d2-ui-components";
 import { NoticeBox } from "@dhis2/ui";
 import i18n from "$/utils/i18n";
 import { ReportSummary } from "$/domain/entities/ReportSummary";
 import { useReports } from "$/webapp/hooks/useReports";
 import { useDomainsContext } from "$/webapp/contexts/domains-context";
-import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
 import { ReportFilters } from "$/webapp/components/report-filters/ReportFilters";
 import { useReportFilters } from "$/webapp/hooks/useReportFilters";
 import { getIdFromPath } from "$/domain/entities/OrganisationUnit";
 import { Layout } from "$/webapp/components/layout/Layout";
+import { useReportTableActions } from "$/webapp/hooks/useReportTableActions";
 
 export const ReportListPage: React.FC = () => {
     const pageTitle = i18n.t("Audit details");
-    const history = useHistory();
-    const getCaptureUrl = useGetCaptureUrl();
     const { fetch, loading: loadingReports, reports } = useReports();
     const { filters, updateFilters, resetFilters } = useReportFilters();
     const {
@@ -26,6 +20,7 @@ export const ReportListPage: React.FC = () => {
         loading: loadingDomains,
         error: domainsError,
     } = useDomainsContext();
+    const { actions } = useReportTableActions(reports);
 
     React.useEffect(() => {
         if (loadingDomains || allDomains.length === 0) return;
@@ -45,24 +40,6 @@ export const ReportListPage: React.FC = () => {
         () => reports.map(report => new ReportSummary(report)),
         [reports]
     );
-
-    const editReport = (reportIds: string[]) => {
-        if (reportIds.length !== 1 || !reportIds[0]) return;
-        const captureUrl = getCaptureUrl(reportIds[0]);
-        window.open(captureUrl, "_blank");
-    };
-
-    const showSummaryReport = (reportIds: string[]) => {
-        if (reportIds.length !== 1) return;
-        const report = reports.find(r => r.id === reportIds[0]);
-        if (!report) return;
-        history.push(`/summary/${report.organisationUnit.id}`);
-    };
-
-    const showDetailedReport = (reportIds: string[]) => {
-        if (reportIds.length !== 1) return;
-        history.push(`/details/${reportIds[0]}`);
-    };
 
     const columns: TableColumn<ReportSummary>[] = [
         {
@@ -102,31 +79,6 @@ export const ReportListPage: React.FC = () => {
             name: "majorNonconformities" as const,
             text: i18n.t("Major Nonconformities"),
             sortable: true,
-        },
-    ];
-
-    const actions: TableAction<ReportSummary>[] = [
-        {
-            name: "edit",
-            text: i18n.t("Edit"),
-            multiple: false,
-            primary: true,
-            onClick: editReport,
-            icon: <EditIcon />,
-        },
-        {
-            name: "showSummary",
-            text: i18n.t("Show Summary Report"),
-            multiple: false,
-            onClick: showSummaryReport,
-            icon: <DescriptionIcon />,
-        },
-        {
-            name: "showDetailed",
-            text: i18n.t("Show Detailed Report"),
-            multiple: false,
-            onClick: showDetailedReport,
-            icon: <AssessmentIcon />,
         },
     ];
 
