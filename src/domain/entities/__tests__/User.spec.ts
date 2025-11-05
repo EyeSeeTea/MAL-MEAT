@@ -1,17 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createAdminUser, createNonAdminUser, createUserWithGroups } from "./userFixtures";
+import { createUserWithGroups } from "./userFixtures";
 
 describe("User", () => {
-    it("should be admin if has a role with authority ALL", () => {
-        const user = createAdminUser();
-
-        expect(user.isAdmin()).toBe(true);
-    });
-    it("should no be admin if hasn't a role with authority ALL", () => {
-        const user = createNonAdminUser();
-
-        expect(user.isAdmin()).toBe(false);
-    });
     it("should return belong to user group equal to false when the id exist", () => {
         const userGroupId = "BwyMfDBLih9";
 

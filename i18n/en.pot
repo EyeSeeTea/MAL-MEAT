@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-11-04T15:44:39.530Z\n"
-"PO-Revision-Date: 2025-11-04T15:44:39.530Z\n"
+"POT-Creation-Date: 2025-11-05T18:37:42.155Z\n"
+"PO-Revision-Date: 2025-11-05T18:37:42.156Z\n"
 
 msgid "Current Response"
 msgstr ""
@@ -98,6 +98,9 @@ msgstr ""
 msgid "Report Overview"
 msgstr ""
 
+msgid "Edit in Capture"
+msgstr ""
+
 msgid "Organisation Unit"
 msgstr ""
 
@@ -108,6 +111,15 @@ msgid "Audit Type"
 msgstr ""
 
 msgid "Major non-conformities"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Show Summary Report"
+msgstr ""
+
+msgid "Show Detailed Report"
 msgstr ""
 
 msgid "Loading report details..."
@@ -128,15 +140,6 @@ msgstr ""
 msgid "Details for {{domain}}"
 msgstr ""
 
-msgid "Hello {{name}}"
-msgstr ""
-
-msgid "Detail page"
-msgstr ""
-
-msgid "Section"
-msgstr ""
-
 msgid "Audit details"
 msgstr ""
 
@@ -150,15 +153,6 @@ msgid "Average Score"
 msgstr ""
 
 msgid "Major Nonconformities"
-msgstr ""
-
-msgid "Edit"
-msgstr ""
-
-msgid "Show Summary Report"
-msgstr ""
-
-msgid "Show Detailed Report"
 msgstr ""
 
 msgid "Error loading domain configuration"
@@ -179,4 +173,15 @@ msgid "An error occurred while loading the summary."
 msgstr ""
 
 msgid "Summary for {{orgUnitName}}"
+msgstr ""
+
+msgid "Unauthorized"
+msgstr ""
+
+msgid "Access Denied"
+msgstr ""
+
+msgid ""
+"You do not have the necessary permissions to access this application. "
+"Please contact your system administrator for assistance."
 msgstr ""
