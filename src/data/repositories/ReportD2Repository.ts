@@ -12,6 +12,8 @@ import { Id } from "$/domain/entities/Ref";
 export class ReportD2Repository implements ReportRepository {
     constructor(private api: D2Api) {}
 
+    private orgUnitsCache: Map<Id, D2OrgUnit> = new Map();
+
     get(filters: GetReportsFilters): FutureData<Report[]> {
         const domainProgramIds = filters.domains.map(domain => domain.id);
         const orgUnitParams = filters.orgUnitId
@@ -77,17 +79,34 @@ export class ReportD2Repository implements ReportRepository {
 
     private getOrgUnitsForEvents(events: D2Event[]): FutureData<D2OrgUnit[]> {
         const orgUnitIds = new Set(events.map(d2Event => d2Event.orgUnit));
+
+        const cachedOrgUnits = Array.from(orgUnitIds)
+            .map(id => this.orgUnitsCache.get(id))
+            .filter((ou): ou is D2OrgUnit => ou !== undefined);
+
+        const cachedIds = new Set(cachedOrgUnits.map(ou => ou.id));
+        const missingIds = Array.from(orgUnitIds).filter(id => !cachedIds.has(id));
+
+        if (missingIds.length === 0) {
+            return Future.success(cachedOrgUnits);
+        }
+
         return apiToFuture(
             this.api.models.organisationUnits.get({
                 fields: orgUnitFields,
                 paging: false,
                 filter: {
                     id: {
-                        in: Array.from(orgUnitIds),
+                        in: missingIds,
                     },
                 },
             })
-        ).map(response => response.objects);
+        ).map(response => {
+            response.objects.forEach(ou => {
+                this.orgUnitsCache.set(ou.id, ou);
+            });
+            return [...cachedOrgUnits, ...response.objects];
+        });
     }
 
     private buildReport(d2Event: D2Event, domains: Domain[], orgUnits: D2OrgUnit[]): Report {
