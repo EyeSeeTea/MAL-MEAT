@@ -1,13 +1,13 @@
 {
-    "name": "dhis2-app-skeleton",
-    "description": "DHIS2 Skeleton App",
+    "name": "mal-meat-audit",
+    "description": "MAL Meat Audit",
     "version": "0.0.1",
     "license": "GPL-3.0",
     "author": "EyeSeeTea team",
     "homepage": ".",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/eyeseetea/dhis2-app-skeleton.git"
+        "url": "git+https://github.com/eyeseetea/MAL-MEAT.git"
     },
     "dependencies": {
         "$": "link:./src",
@@ -98,8 +98,8 @@
         "script-example": "yarn run-script src/scripts/example.ts"
     },
     "manifest.webapp": {
-        "name": "DHIS2 Skeleton App",
-        "description": "DHIS2 Skeleton App",
+        "name": "MAL Meat Audit",
+        "description": "MAL Meat Audit",
         "icons": {
             "48": "icon.png"
         },
