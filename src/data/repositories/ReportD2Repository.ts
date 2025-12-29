@@ -3,7 +3,7 @@ import { apiToFuture, FutureData } from "$/data/api-futures";
 import { GetReportsFilters, ReportRepository } from "$/domain/repositories/ReportRepository";
 import { Report } from "$/domain/entities/Report";
 import { Future } from "$/domain/entities/generic/Future";
-import { Domain } from "$/domain/entities/Domain";
+import { Domain, DomainType } from "$/domain/entities/Domain";
 import { D2EventSchema } from "@eyeseetea/d2-api";
 import { config } from "$/data/config";
 import { DHIS_OU_PATH_SEPARATOR } from "$/data/repositories/OrganisationUnitD2Repository";
@@ -15,7 +15,7 @@ export class ReportD2Repository implements ReportRepository {
     private orgUnitsCache: Map<Id, D2OrgUnit> = new Map();
 
     get(filters: GetReportsFilters): FutureData<Report[]> {
-        const domainProgramIds = filters.domains.map(domain => domain.id);
+        const domainProgramIds = [...new Set(filters.domains.map(domain => domain.id))];
         const orgUnitParams = filters.orgUnitId
             ? { orgUnit: filters.orgUnitId, ouMode: "DESCENDANTS" as const }
             : {};
@@ -44,12 +44,13 @@ export class ReportD2Repository implements ReportRepository {
         );
         // TODO: find a better way to mix all the responses from separate programs with paging
         // the api does not support filtering by multiple programs at once
+        // Multiple domains can belong to same program
         return Future.parallel(getEventsForPrograms$, { concurrency: 2 }).flatMap(
             eventResponses => {
                 const d2Events = eventResponses.flatMap(r => r.instances);
                 return this.getOrgUnitsForEvents(d2Events).flatMap(d2OrgUnits => {
-                    const reports = d2Events.map(d2Event =>
-                        this.buildReport(d2Event, filters.domains, d2OrgUnits)
+                    const reports = d2Events.flatMap(d2Event =>
+                        this.buildReports(d2Event, filters.domains, d2OrgUnits)
                     );
                     return Future.success(reports);
                 });
@@ -57,7 +58,11 @@ export class ReportD2Repository implements ReportRepository {
         );
     }
 
-    getById(reportId: Id, domains: Domain[]): FutureData<Report | null> {
+    getById(reportId: Id, domainType: DomainType, domains: Domain[]): FutureData<Report | null> {
+        const domain = domains.find(d => d.type === domainType);
+        if (!domain) {
+            return Future.error(new Error("Couldn't find domain for the given domain type"));
+        }
         const getEvent$ = apiToFuture(
             this.api.tracker.events.get({
                 fields: eventFields,
@@ -67,12 +72,12 @@ export class ReportD2Repository implements ReportRepository {
         );
         return getEvent$.flatMap(eventResponse => {
             const d2Event = eventResponse.instances[0];
-            if (!d2Event) {
+            if (!d2Event || !this.eventHasDomain(d2Event, domain)) {
                 return Future.success(null);
             }
             return this.getOrgUnitsForEvents([d2Event]).flatMap(orgUnits => {
-                const report = this.buildReport(d2Event, domains, orgUnits);
-                return Future.success(report);
+                const report = this.buildReports(d2Event, [domain], orgUnits);
+                return Future.success(report[0] ?? null);
             });
         });
     }
@@ -109,18 +114,20 @@ export class ReportD2Repository implements ReportRepository {
         });
     }
 
-    private buildReport(d2Event: D2Event, domains: Domain[], orgUnits: D2OrgUnit[]): Report {
-        const domain = domains.find(domain => domain.id === d2Event.program);
-        if (!domain) {
+    private buildReports(d2Event: D2Event, domains: Domain[], orgUnits: D2OrgUnit[]): Report[] {
+        const filteredDomains = domains.filter(
+            domain => domain.id === d2Event.program && this.eventHasDomain(d2Event, domain)
+        );
+        if (filteredDomains.length === 0) {
             throw new Error(`Unknown domain for program ID ${d2Event.program}`);
         }
         const orgUnit = orgUnits.find(ou => ou.id === d2Event.orgUnit);
         if (!orgUnit) {
             throw new Error(`Organisation unit not found for ID ${d2Event.orgUnit}`);
         }
-        return {
-            domainName: domain.name,
-            audit: this.buildAudit(d2Event, domain),
+        return filteredDomains.map(d => ({
+            domainName: d.name,
+            audit: this.buildAudit(d2Event, d),
             date: new Date(d2Event.occurredAt),
             domainId: d2Event.program,
             id: d2Event.event,
@@ -129,7 +136,7 @@ export class ReportD2Repository implements ReportRepository {
                 name: orgUnit.name,
                 path: orgUnit.path.split(DHIS_OU_PATH_SEPARATOR),
             },
-            questions: domain.questions.map(q => {
+            questions: d.questions.map(q => {
                 const dataValue = d2Event.dataValues.find((dv: any) => dv.dataElement === q.id);
                 if (!dataValue) {
                     // throw new Error(
@@ -149,7 +156,16 @@ export class ReportD2Repository implements ReportRepository {
                     value: Number(dataValue.value),
                 };
             }),
-        };
+        }));
+    }
+
+    private eventHasDomain(d2Event: D2Event, domain: Domain): boolean {
+        return (
+            d2Event.program === domain.id &&
+            d2Event.dataValues.some(dv =>
+                domain.questions.some(q => q.id === dv.dataElement && dv.value !== undefined)
+            )
+        );
     }
 
     private buildAudit(d2Event: D2Event, domain: Domain): Report["audit"] {

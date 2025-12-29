@@ -25,19 +25,19 @@ const CMConfig: DomainConfig = {
     },
 };
 
-// const SurveillanceConfig: DomainConfig = {
-//     programId: "HBqDdmS6zgz",
-//     stageSections: {
-//         details: "oI8oELri0TE",
-//         audit: "gARUS8N1UfB",
-//         questions: "IvtnyV05RI8",
-//     },
-// };
+const SurveillanceConfig: DomainConfig = {
+    programId: "aovCBBxlKkX",
+    stageSections: {
+        details: "HRxUosOUz0q",
+        audit: "Mkl7IuWLVKh",
+        questions: "gXma9dAmGuU",
+    },
+};
 
 export const config = {
     domains: {
         CM: CMConfig,
-        // Surveillance: SurveillanceConfig,
+        Surveillance: SurveillanceConfig,
     },
     codesPrefix: "MAL_MEAT_",
     auditQuestions: {

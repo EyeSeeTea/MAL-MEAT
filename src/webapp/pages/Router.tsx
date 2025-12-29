@@ -16,8 +16,13 @@ export function Router() {
             <Switch>
                 {permissions.DETAILS_PAGE && (
                     <Route
-                        path="/details/:reportId"
-                        render={({ match }) => <DetailsPage reportId={match.params.reportId} />}
+                        path="/details/:reportId/:domainType"
+                        render={({ match }) => (
+                            <DetailsPage
+                                reportId={match.params.reportId}
+                                domainType={match.params.domainType}
+                            />
+                        )}
                     />
                 )}
                 {permissions.SUMMARY_PAGE && (

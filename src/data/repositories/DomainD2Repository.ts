@@ -10,7 +10,9 @@ export class DomainD2Repository implements DomainRepository {
     constructor(private api: D2Api) {}
 
     get(): FutureData<Domain[]> {
-        const domainProgramIds = Object.values(config.domains).map(domain => domain.programId);
+        const domainProgramIds = [
+            ...new Set(Object.values(config.domains).map(domain => domain.programId)),
+        ];
         const getPrograms$ = apiToFuture(
             this.api.models.programs.get({
                 fields: programFields,
@@ -33,16 +35,26 @@ export class DomainD2Repository implements DomainRepository {
             programs: getPrograms$,
             constants: getConstants$,
         }).flatMap(({ programs, constants }) => {
-            return Future.success(
-                programs.objects.map(programData =>
-                    this.buildDomain(programData, constants.objects)
-                )
-            );
+            return Future.success(this.buildDomains(programs.objects, constants.objects));
         });
     }
 
-    private buildDomain(domainData: D2Program, constants: D2Constant[]): Domain {
-        const domainType = this.getDomainTypeByProgramId(domainData.id);
+    private buildDomains(domainPrograms: D2Program[], constants: D2Constant[]): Domain[] {
+        Object.entries(config.domains).map(([domainType, domainConfig]) => {
+            const programData = domainPrograms.find(dp => dp.id === domainConfig.programId);
+            if (!programData) {
+                throw new Error(`Program data not found for domain type: ${domainType}`);
+            }
+            return this.buildDomain(domainType as DomainType, programData, constants);
+        });
+        return [];
+    }
+
+    private buildDomain(
+        domainType: DomainType,
+        domainData: D2Program,
+        constants: D2Constant[]
+    ): Domain {
         const questionsSection = domainData.programStages[0]?.programStageSections.find(
             section => section.id === config.domains[domainType].stageSections.questions
         );

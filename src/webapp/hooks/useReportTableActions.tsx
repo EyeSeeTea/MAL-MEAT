@@ -39,9 +39,11 @@ export function useReportTableActions(reports: Report[]): {
     const showDetailedReport = React.useCallback(
         (reportIds: string[]) => {
             if (reportIds.length !== 1) return;
-            history.push(`/details/${reportIds[0]}`);
+            const report = reports.find(r => r.id === reportIds[0]);
+            if (!report) return;
+            history.push(`/details/${reportIds[0]}/${report.domainName}`);
         },
-        [history]
+        [history, reports]
     );
 
     const actions = React.useMemo(() => {

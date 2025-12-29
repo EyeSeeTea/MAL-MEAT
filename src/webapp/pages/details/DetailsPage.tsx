@@ -10,10 +10,11 @@ import React from "react";
 
 export interface DetailsProps {
     reportId: Id;
+    domainType: string;
 }
 
-export const DetailsPage: React.FC<DetailsProps> = ({ reportId }: DetailsProps) => {
-    const { loader } = useReportWithPrevious(reportId);
+export const DetailsPage: React.FC<DetailsProps> = ({ reportId, domainType }: DetailsProps) => {
+    const { loader } = useReportWithPrevious(reportId, domainType);
     const defaultTitle = "Details";
     if (loader.type === "loading") {
         return (
