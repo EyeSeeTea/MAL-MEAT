@@ -5,6 +5,7 @@ import { Future } from "$/domain/entities/generic/Future";
 import { Question, QuestionOption } from "$/domain/entities/Question";
 import { DomainRepository } from "$/domain/repositories/DomainRepository";
 import { D2Api, D2ConstantSchema, D2ProgramSchema, SelectedPick } from "$/types/d2-api";
+import i18n from "$/utils/i18n";
 
 export class DomainD2Repository implements DomainRepository {
     constructor(private api: D2Api) {}
@@ -40,14 +41,13 @@ export class DomainD2Repository implements DomainRepository {
     }
 
     private buildDomains(domainPrograms: D2Program[], constants: D2Constant[]): Domain[] {
-        Object.entries(config.domains).map(([domainType, domainConfig]) => {
+        return Object.entries(config.domains).map(([domainType, domainConfig]) => {
             const programData = domainPrograms.find(dp => dp.id === domainConfig.programId);
             if (!programData) {
                 throw new Error(`Program data not found for domain type: ${domainType}`);
             }
             return this.buildDomain(domainType as DomainType, programData, constants);
         });
-        return [];
     }
 
     private buildDomain(
@@ -69,21 +69,19 @@ export class DomainD2Repository implements DomainRepository {
         }
         return {
             id: domainData.id,
-            name: domainData.name,
+            name: this.getDomainNameByType(domainType),
             type: domainType,
             audit: this.buildAuditQuestions(auditSection.dataElements),
             questions: this.buildQuestions(questionsSection.dataElements, constants),
         };
     }
 
-    private getDomainTypeByProgramId(programId: string): DomainType {
-        const domainEntry = Object.entries(config.domains).find(([_domainType, domainConfig]) => {
-            return domainConfig.programId === programId;
-        });
-        if (!domainEntry) {
-            throw new Error(`Domain configuration not found for program ID: ${programId}`);
-        }
-        return domainEntry[0] as DomainType;
+    private getDomainNameByType(domainType: DomainType): string {
+        const domainNames: Record<DomainType, string> = {
+            CM: i18n.t("Case Management"),
+            Surveillance: i18n.t("Surveillance"),
+        };
+        return domainNames[domainType];
     }
 
     private buildAuditQuestions(dataElements: D2DataElement[]): Domain["audit"] {

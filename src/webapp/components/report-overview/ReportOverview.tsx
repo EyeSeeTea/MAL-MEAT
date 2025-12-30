@@ -9,6 +9,7 @@ import { ScoreBadge } from "$/webapp/components/numeric-badge/ScoreBadge";
 import { usePermissions } from "$/webapp/hooks/usePermissions";
 import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
 import { Launch as LaunchIcon } from "@material-ui/icons";
+import { useDomainName } from "$/webapp/hooks/useDomainName";
 
 export interface ReportOverviewProps {
     report: Report;
@@ -22,6 +23,8 @@ export const ReportOverview: React.FC<ReportOverviewProps> = ({ report }: Report
     const formatDate = (date: Date): string => {
         return date.toISOString().split("T")[0] as string;
     };
+
+    const domainName = useDomainName(report.domainType);
 
     return (
         <Card>
@@ -42,7 +45,7 @@ export const ReportOverview: React.FC<ReportOverviewProps> = ({ report }: Report
                 <DetailsGrid>
                     <DetailItem>
                         <DetailLabel>{i18n.t("Domain")}:</DetailLabel>
-                        <DetailValue>{report.domainName}</DetailValue>
+                        <DetailValue>{domainName}</DetailValue>
                     </DetailItem>
 
                     <DetailItem>

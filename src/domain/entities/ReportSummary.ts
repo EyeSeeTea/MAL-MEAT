@@ -1,11 +1,13 @@
+import { DomainType } from "$/domain/entities/Domain";
 import { Id } from "$/domain/entities/Ref";
 import { Report } from "$/domain/entities/Report";
 
 export class ReportSummary {
     report: Report;
 
-    id: Id;
-    domain: string;
+    id: string;
+    eventId: Id;
+    domain: DomainType;
     date: string;
     organisationUnitName: string;
     auditLevel: string;
@@ -14,8 +16,9 @@ export class ReportSummary {
 
     constructor(report: Report) {
         this.report = report;
-        this.id = report.id;
-        this.domain = report.domainName;
+        this.id = `${report.id}-${report.domainType}`;
+        this.eventId = report.id;
+        this.domain = report.domainType;
         this.date = report.date.toISOString().slice(0, 10);
         this.organisationUnitName = report.organisationUnit.name;
         this.auditLevel = report.audit.level?.name ?? "";

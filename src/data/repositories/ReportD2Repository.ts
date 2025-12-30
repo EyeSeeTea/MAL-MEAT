@@ -126,7 +126,7 @@ export class ReportD2Repository implements ReportRepository {
             throw new Error(`Organisation unit not found for ID ${d2Event.orgUnit}`);
         }
         return filteredDomains.map(d => ({
-            domainName: d.name,
+            domainType: d.type,
             audit: this.buildAudit(d2Event, d),
             date: new Date(d2Event.occurredAt),
             domainId: d2Event.program,

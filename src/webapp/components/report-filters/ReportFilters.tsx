@@ -3,19 +3,18 @@ import styled from "styled-components";
 import { Select, MenuItem, InputLabel, FormControl, Button } from "@material-ui/core";
 import { Clear } from "@material-ui/icons";
 import i18n from "$/utils/i18n";
-import { Domain } from "$/domain/entities/Domain";
-import { Id } from "$/domain/entities/Ref";
+import { Domain, DomainType } from "$/domain/entities/Domain";
 import { OrgUnitFilter } from "$/webapp/components/org-units-filter/OrgUnitFilter";
 import { OrgUnitPath } from "$/domain/entities/OrganisationUnit";
 import { useReportFiltersOptions } from "$/webapp/hooks/useReportFiltersOptions";
 
 export interface ReportFiltersProps {
     domains: Domain[];
-    selectedDomainId: Id | undefined;
+    selectedDomainType: DomainType | undefined;
     selectedOrgUnit: OrgUnitPath | undefined;
     selectedYear: number | undefined;
     selectedLevelOfAudit: string | undefined;
-    onDomainChange: (domainId: Id | undefined) => void;
+    onDomainChange: (domainType: DomainType | undefined) => void;
     onOrgUnitChange: (orgUnitPath: OrgUnitPath | undefined) => void;
     onYearChange: (year: number | undefined) => void;
     onLevelOfAuditChange: (levelOfAudit: string | undefined) => void;
@@ -24,7 +23,7 @@ export interface ReportFiltersProps {
 
 export const ReportFilters: React.FC<ReportFiltersProps> = ({
     domains,
-    selectedDomainId,
+    selectedDomainType,
     selectedOrgUnit,
     selectedYear,
     selectedLevelOfAudit,
@@ -37,7 +36,7 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
     const { auditLevelOptions, yearOptions } = useReportFiltersOptions(domains);
 
     const handleDomainChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const value = event.target.value as string;
+        const value = event.target.value as DomainType;
         onDomainChange(value || undefined);
     };
 
@@ -61,7 +60,7 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
     );
 
     const isResetVisible = Boolean(
-        selectedDomainId || selectedOrgUnit || selectedYear || selectedLevelOfAudit
+        selectedDomainType || selectedOrgUnit || selectedYear || selectedLevelOfAudit
     );
 
     return (
@@ -69,10 +68,10 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
             <FilterRow>
                 <FilterControl>
                     <InputLabel>{i18n.t("Domain")}</InputLabel>
-                    <Select value={selectedDomainId ?? ""} onChange={handleDomainChange}>
+                    <Select value={selectedDomainType ?? ""} onChange={handleDomainChange}>
                         <MenuItem value="">{i18n.t("All domains")}</MenuItem>
                         {domains.map(domain => (
-                            <MenuItem key={domain.id} value={domain.id}>
+                            <MenuItem key={domain.type} value={domain.type}>
                                 {domain.name}
                             </MenuItem>
                         ))}

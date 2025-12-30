@@ -17,33 +17,42 @@ export function useReportTableActions(reports: Report[]): {
     const getCaptureUrl = useGetCaptureUrl();
     const permissions = usePermissions();
 
+    const findReportById = React.useCallback(
+        (rowId: string | undefined) => {
+            if (!rowId) return;
+            const [eventId, domainType] = rowId.split("-");
+            if (!eventId || !domainType) return;
+            return reports.find(r => r.id === eventId && r.domainType === domainType);
+        },
+        [reports]
+    );
+
     const editReport = React.useCallback(
         (reportIds: string[]) => {
-            if (reportIds.length !== 1 || !reportIds[0]) return;
-            const captureUrl = getCaptureUrl(reportIds[0]);
+            const report = findReportById(reportIds[0]);
+            if (!report) return;
+            const captureUrl = getCaptureUrl(report.id);
             window.open(captureUrl, "_blank");
         },
-        [getCaptureUrl]
+        [getCaptureUrl, findReportById]
     );
 
     const showSummaryReport = React.useCallback(
         (reportIds: string[]) => {
-            if (reportIds.length !== 1) return;
-            const report = reports.find(r => r.id === reportIds[0]);
+            const report = findReportById(reportIds[0]);
             if (!report) return;
             history.push(`/summary/${report.organisationUnit.id}`);
         },
-        [history, reports]
+        [history, findReportById]
     );
 
     const showDetailedReport = React.useCallback(
         (reportIds: string[]) => {
-            if (reportIds.length !== 1) return;
-            const report = reports.find(r => r.id === reportIds[0]);
+            const report = findReportById(reportIds[0]);
             if (!report) return;
-            history.push(`/details/${reportIds[0]}/${report.domainName}`);
+            history.push(`/details/${report.id}/${report.domainType}`);
         },
-        [history, reports]
+        [history, findReportById]
     );
 
     const actions = React.useMemo(() => {

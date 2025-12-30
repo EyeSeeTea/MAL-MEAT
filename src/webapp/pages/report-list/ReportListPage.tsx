@@ -24,8 +24,8 @@ export const ReportListPage: React.FC = () => {
 
     React.useEffect(() => {
         if (loadingDomains || allDomains.length === 0) return;
-        const selectedDomains = filters.domainId
-            ? allDomains.filter(d => d.id === filters.domainId)
+        const selectedDomains = filters.domainType
+            ? allDomains.filter(d => d.type === filters.domainType)
             : allDomains;
         updatePaging({ page: 1 }); // reset to first page on filter change
         fetch({
@@ -64,8 +64,8 @@ export const ReportListPage: React.FC = () => {
             text: i18n.t("Domain"),
             sortable: true,
             getValue: (summary: ReportSummary) => {
-                const domain = allDomains.find(d => d.id === summary.report.domainId);
-                return domain?.name;
+                const domain = allDomains.find(d => d.type === summary.domain);
+                return domain ? domain.name : summary.domain;
             },
         },
         {
@@ -132,11 +132,11 @@ export const ReportListPage: React.FC = () => {
                 filterComponents={
                     <ReportFilters
                         domains={allDomains}
-                        selectedDomainId={filters.domainId}
+                        selectedDomainType={filters.domainType}
                         selectedOrgUnit={filters.orgUnitPath}
                         selectedYear={filters.year}
                         selectedLevelOfAudit={filters.levelOfAudit}
-                        onDomainChange={domainId => updateFilters({ domainId })}
+                        onDomainChange={domainType => updateFilters({ domainType })}
                         onOrgUnitChange={orgUnitPath => updateFilters({ orgUnitPath })}
                         onYearChange={year => updateFilters({ year })}
                         onLevelOfAuditChange={levelOfAudit => updateFilters({ levelOfAudit })}

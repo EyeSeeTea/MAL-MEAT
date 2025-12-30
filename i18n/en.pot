@@ -5,8 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-11-05T18:37:42.155Z\n"
-"PO-Revision-Date: 2025-11-05T18:37:42.156Z\n"
+"POT-Creation-Date: 2025-12-30T13:41:53.053Z\n"
+"PO-Revision-Date: 2025-12-30T13:41:53.053Z\n"
+
+msgid "Case Management"
+msgstr ""
+
+msgid "Surveillance"
+msgstr ""
 
 msgid "Current Response"
 msgstr ""
@@ -137,7 +143,7 @@ msgstr ""
 msgid "The requested report does not exist."
 msgstr ""
 
-msgid "Details for {{domain}}"
+msgid "Report Details"
 msgstr ""
 
 msgid "Audit details"

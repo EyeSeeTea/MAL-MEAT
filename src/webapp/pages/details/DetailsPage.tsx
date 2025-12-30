@@ -44,7 +44,7 @@ export const DetailsPage: React.FC<DetailsProps> = ({ reportId, domainType }: De
     }
     if (loader.type === "loaded" && loader.value) {
         const value = loader.value;
-        const title = i18n.t("Details for {{domain}}", { domain: value.report.domainName });
+        const title = i18n.t("Report Details");
         return (
             <Layout title={title} withGoBack>
                 <ReportOverview report={value.report} />

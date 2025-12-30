@@ -1,10 +1,10 @@
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { Id } from "$/domain/entities/Ref";
 import { OrgUnitPath } from "$/domain/entities/OrganisationUnit";
+import { DomainType, isDomainType } from "$/domain/entities/Domain";
 
 export interface ReportFiltersState {
-    domainId: Id | undefined;
+    domainType: DomainType | undefined;
     orgUnitPath: OrgUnitPath | undefined;
     year: number | undefined;
     levelOfAudit: string | undefined;
@@ -18,7 +18,7 @@ export interface PagingState {
 }
 
 const defaultFilters: ReportFiltersState = {
-    domainId: undefined,
+    domainType: undefined,
     orgUnitPath: undefined,
     year: undefined,
     levelOfAudit: undefined,
@@ -36,9 +36,9 @@ function parseFiltersFromUrl(search: string): ReportFiltersState {
 
     const orgUnitPathStr = params.get("orgUnitPath");
     const yearStr = params.get("year");
-
+    const domain = params.get("domainType");
     return {
-        domainId: params.get("domainId") || undefined,
+        domainType: domain && isDomainType(domain) ? domain : undefined,
         orgUnitPath: orgUnitPathStr ? orgUnitPathStr.split(",") : undefined,
         year: yearStr ? parseInt(yearStr, 10) : undefined,
         levelOfAudit: params.get("levelOfAudit") || undefined,
@@ -63,7 +63,7 @@ function parsePagingFromUrl(search: string): PagingState {
 function serializeToUrl(filters: ReportFiltersState, paging: PagingState): string {
     const params = new URLSearchParams();
 
-    if (filters.domainId) params.set("domainId", filters.domainId);
+    if (filters.domainType) params.set("domainType", filters.domainType);
     if (filters.orgUnitPath) params.set("orgUnitPath", filters.orgUnitPath.join(","));
     if (filters.year) params.set("year", filters.year.toString());
     if (filters.levelOfAudit) params.set("levelOfAudit", filters.levelOfAudit);

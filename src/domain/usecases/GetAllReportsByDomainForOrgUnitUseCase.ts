@@ -32,7 +32,7 @@ export class GetAllReportsByDomainForOrgUnitUseCase {
             const list = options.domains.map(domain => ({
                 domain,
                 reports: _c(reports)
-                    .filter(report => report.domainId === domain.id)
+                    .filter(report => report.domainType === domain.type)
                     .toArray(),
             }));
             return new OrganisationUnitSummary(organisationUnit, list);

@@ -7,7 +7,7 @@ const baseReport: Report = {
     },
     date: new Date(),
     domainId: "",
-    domainName: "",
+    domainType: "CM",
     id: "",
     organisationUnit: {
         id: "",
