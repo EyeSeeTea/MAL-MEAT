@@ -70,6 +70,21 @@ $ yarn localize
 
 Check the example script, entry `"script-example"`in `package.json`->scripts and `src/scripts/example.ts`.
 
+#### Create Rules
+
+Outputs a metadata.json containing the programRuleVariables and programRules needed to make all elements inside a section required if any of the fields has a value set.
+The script allows to select a program -> programStage -> programStageSection once it is run.
+
+```sh
+# OPTIONS:
+#   --dhis2-url, -u <str>  - DHIS2 base URL. Example: http://localhost:8080
+#   --dhis2-auth, -a <str> - DHIS2 Auth. USERNAME:PASSWORD
+#   --output, -o <str>     - Output JSON file path. Default: program-rules-metadata.json [optional]
+
+yarn run create-rules -u 'http://localhost:8080' -a 'admin:district'
+yarn run create-rules -u 'http://localhost:8080' -a 'admin:district' -o metadata.json
+```
+
 ### Misc Notes
 
 -   Requests to DHIS2 will be transparently proxied (see `vite.config.ts` -> `server.proxy`) from `http://localhost:8081/dhis2/xyz` to `${VITE_DHIS2_BASE_URL}/xyz`. This prevents CORS and cross-domain problems.

@@ -95,7 +95,8 @@
         "localize": "yarn update-po && d2-i18n-generate -l -n dhis2-skeleton-app -p ./i18n/ -o ./src/locales/",
         "update-po": "yarn extract-pot && find i18n/ -name '*.po' -exec msgmerge --backup=off -U {} i18n/en.pot \\;",
         "prepare": "husky install",
-        "script-example": "yarn run-script src/scripts/example.ts"
+        "script-example": "yarn run-script src/scripts/example.ts",
+        "create-rules": "yarn run-script src/scripts/createRequireInSectionProgramRules.ts"
     },
     "manifest.webapp": {
         "name": "MAL Meat Audit",
