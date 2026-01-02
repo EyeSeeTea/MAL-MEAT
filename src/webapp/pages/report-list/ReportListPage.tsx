@@ -114,7 +114,7 @@ export const ReportListPage: React.FC = () => {
                 rows={summaries}
                 columns={columns}
                 actions={actions}
-                loading={loadingReports}
+                loading={loadingDomains || loadingReports}
                 pagination={{
                     page: paging.page,
                     pageSize: paging.rowsPerPage,
