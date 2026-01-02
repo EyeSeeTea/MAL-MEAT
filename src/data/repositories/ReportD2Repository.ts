@@ -114,6 +114,10 @@ export class ReportD2Repository implements ReportRepository {
         });
     }
 
+    /**
+     * Build reports from a D2 event for the given domains
+     * Returns only existing and valid reports (a domain may not be present in the event, a report may not contains all required questions)
+     */
     private buildReports(d2Event: D2Event, domains: Domain[], orgUnits: D2OrgUnit[]): Report[] {
         const filteredDomains = domains.filter(
             domain => domain.id === d2Event.program && this.eventHasDomain(d2Event, domain)
@@ -125,38 +129,39 @@ export class ReportD2Repository implements ReportRepository {
         if (!orgUnit) {
             throw new Error(`Organisation unit not found for ID ${d2Event.orgUnit}`);
         }
-        return filteredDomains.map(d => ({
-            domainType: d.type,
-            audit: this.buildAudit(d2Event, d),
-            date: new Date(d2Event.occurredAt),
-            domainId: d2Event.program,
-            id: d2Event.event,
-            organisationUnit: {
-                id: orgUnit.id,
-                name: orgUnit.name,
-                path: orgUnit.path.split(DHIS_OU_PATH_SEPARATOR),
-            },
-            questions: d.questions.map(q => {
-                const dataValue = d2Event.dataValues.find((dv: any) => dv.dataElement === q.id);
-                if (!dataValue) {
-                    // throw new Error(
-                    //     `Data value not found for question ID ${q.id} in event ${d2Event.event}`
-                    // );
-                    // TODO: DEFINE THIS BEHAVIOR
-                    console.warn(
-                        `Data value not found for question ID ${q.id} in event ${d2Event.event}`
-                    );
+        return filteredDomains
+            .map(d => {
+                const questions = d.questions.map(q => {
+                    const dataValue = d2Event.dataValues.find((dv: any) => dv.dataElement === q.id);
+                    if (!dataValue) {
+                        console.warn(
+                            `Data value not found for question ID ${q.id} in event ${d2Event.event} (domain ${d.type})`
+                        );
+                        return null;
+                    }
                     return {
                         ...q,
-                        value: 1,
+                        value: Number(dataValue.value),
                     };
+                });
+                if (questions.some(q => !q)) {
+                    return null;
                 }
                 return {
-                    ...q,
-                    value: Number(dataValue.value),
+                    domainType: d.type,
+                    audit: this.buildAudit(d2Event, d),
+                    date: new Date(d2Event.occurredAt),
+                    domainId: d2Event.program,
+                    id: d2Event.event,
+                    organisationUnit: {
+                        id: orgUnit.id,
+                        name: orgUnit.name,
+                        path: orgUnit.path.split(DHIS_OU_PATH_SEPARATOR),
+                    },
+                    questions,
                 };
-            }),
-        }));
+            })
+            .filter(Boolean) as Report[];
     }
 
     private eventHasDomain(d2Event: D2Event, domain: Domain): boolean {
