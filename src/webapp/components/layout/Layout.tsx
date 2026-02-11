@@ -7,9 +7,10 @@ export interface LayoutProps {
     children: ReactNode;
     title: string;
     withGoBack?: boolean;
+    headerRight?: ReactNode;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, title, withGoBack }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, title, withGoBack, headerRight }) => {
     const history = useHistory();
 
     const goBack = React.useCallback(() => {
@@ -17,7 +18,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, title, withGoBack }) =
     }, [history]);
     return (
         <Container>
-            <PageHeader title={title} onBackClick={withGoBack ? goBack : undefined} />
+            <PageHeader title={title} onBackClick={withGoBack ? goBack : undefined}>
+                {headerRight}
+            </PageHeader>
             {children}
         </Container>
     );

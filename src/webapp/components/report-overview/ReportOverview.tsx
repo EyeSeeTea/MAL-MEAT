@@ -7,9 +7,10 @@ import styled from "styled-components";
 import { NonConformitiesBadge } from "$/webapp/components/numeric-badge/NonConformitiesBadge";
 import { ScoreBadge } from "$/webapp/components/numeric-badge/ScoreBadge";
 import { usePermissions } from "$/webapp/hooks/usePermissions";
-import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
+import { useGetCaptureUrlViewEvent } from "$/webapp/hooks/useGetCaptureUrl";
 import { Launch as LaunchIcon } from "@material-ui/icons";
 import { useDomainName } from "$/webapp/hooks/useDomainName";
+import { ExternalLink } from "$/webapp/components/external-link/ExternalLink";
 
 export interface ReportOverviewProps {
     report: Report;
@@ -18,7 +19,7 @@ export interface ReportOverviewProps {
 export const ReportOverview: React.FC<ReportOverviewProps> = ({ report }: ReportOverviewProps) => {
     const reportSummary = React.useMemo(() => new ReportSummary(report), [report]);
     const permissions = usePermissions();
-    const getCaptureUrl = useGetCaptureUrl();
+    const getCaptureUrl = useGetCaptureUrlViewEvent();
 
     const formatDate = (date: Date): string => {
         return date.toISOString().split("T")[0] as string;
@@ -31,11 +32,7 @@ export const ReportOverview: React.FC<ReportOverviewProps> = ({ report }: Report
             <CardHeader>
                 <HeaderTitle>{i18n.t("Report Overview")}</HeaderTitle>
                 {permissions.EDIT && (
-                    <ExternalLink
-                        href={getCaptureUrl(report.id)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                    <ExternalLink href={getCaptureUrl(report.id)} variant="light">
                         <LaunchIcon fontSize="small" />
                         {i18n.t("Edit in Capture")}
                     </ExternalLink>
@@ -106,28 +103,6 @@ const HeaderTitle = styled.h2`
     margin: 0;
     font-size: 1.5rem;
     font-weight: 500;
-`;
-
-const ExternalLink = styled.a`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.15);
-    transition: background-color 0.2s ease;
-
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.25);
-    }
-
-    svg {
-        font-size: 1rem;
-    }
 `;
 
 const CardBody = styled.div`

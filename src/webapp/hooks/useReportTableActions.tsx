@@ -2,7 +2,7 @@ import { ReportSummary } from "$/domain/entities/ReportSummary";
 import { TableAction } from "@eyeseetea/d2-ui-components";
 import i18n from "$/utils/i18n";
 import { useHistory } from "react-router-dom";
-import { useGetCaptureUrl } from "$/webapp/hooks/useGetCaptureUrl";
+import { useGetCaptureUrlViewEvent } from "$/webapp/hooks/useGetCaptureUrl";
 import { Report } from "$/domain/entities/Report";
 import EditIcon from "@material-ui/icons/Edit";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -14,7 +14,7 @@ export function useReportTableActions(reports: Report[]): {
     actions: TableAction<ReportSummary>[];
 } {
     const history = useHistory();
-    const getCaptureUrl = useGetCaptureUrl();
+    const getCaptureUrl = useGetCaptureUrlViewEvent();
     const permissions = usePermissions();
 
     const findReportById = React.useCallback(

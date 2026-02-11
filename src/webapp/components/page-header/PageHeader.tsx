@@ -32,9 +32,8 @@ export const PageHeader: React.FC<PageHeaderProps> = React.memo(props => {
 
                     {helpText && <HelpButton text={helpText} />}
                 </TitleRow>
-
-                {children && <ActionsContainer>{children}</ActionsContainer>}
             </HeaderContent>
+            {children && <ActionsContainer>{children}</ActionsContainer>}
         </HeaderContainer>
     );
 });
@@ -47,18 +46,20 @@ export type PageHeaderProps = PropsWithChildren & {
 };
 
 const HeaderContainer = styled.div`
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     padding-bottom: 1.5rem;
     background-color: #fafafa;
     padding: 1.25rem 1.5rem;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
 `;
 
 const HeaderContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    flex: 1;
 `;
 
 const TitleRow = styled.div`

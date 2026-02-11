@@ -10,6 +10,10 @@ import { PagingState, useReportFilters } from "$/webapp/hooks/useReportFilters";
 import { getIdFromPath } from "$/domain/entities/OrganisationUnit";
 import { Layout } from "$/webapp/components/layout/Layout";
 import { useReportTableActions } from "$/webapp/hooks/useReportTableActions";
+import { Launch as LaunchIcon } from "@material-ui/icons";
+import { useCaptureUrlNewReport } from "$/webapp/hooks/useGetCaptureUrl";
+import { usePermissions } from "$/webapp/hooks/usePermissions";
+import { ExternalLink } from "$/webapp/components/external-link/ExternalLink";
 
 export const ReportListPage: React.FC = () => {
     const pageTitle = i18n.t("Audit details");
@@ -21,6 +25,8 @@ export const ReportListPage: React.FC = () => {
         error: domainsError,
     } = useDomainsContext();
     const { actions } = useReportTableActions(reports);
+    const permissions = usePermissions();
+    const createReportUrl = useCaptureUrlNewReport();
 
     React.useEffect(() => {
         if (loadingDomains || allDomains.length === 0) return;
@@ -100,7 +106,18 @@ export const ReportListPage: React.FC = () => {
     ];
 
     return (
-        <Layout title={pageTitle}>
+        <Layout
+            title={pageTitle}
+            headerRight={
+                permissions.EDIT &&
+                createReportUrl && (
+                    <ExternalLink href={createReportUrl} variant="dark">
+                        <LaunchIcon fontSize="small" />
+                        {i18n.t("Create Report")}
+                    </ExternalLink>
+                )
+            }
+        >
             {domainsError && (
                 <NoticeBox title={i18n.t("Error loading domain configuration")} error>
                     {i18n.t(
