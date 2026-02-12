@@ -17,7 +17,10 @@ export class ReportD2Repository implements ReportRepository {
     get(filters: GetReportsFilters): FutureData<Report[]> {
         const domainProgramIds = [...new Set(filters.domains.map(domain => domain.id))];
         const orgUnitParams = filters.orgUnitId
-            ? { orgUnit: filters.orgUnitId, ouMode: "DESCENDANTS" as const }
+            ? {
+                  orgUnit: filters.orgUnitId,
+                  ouMode: filters.orgUnitMode ?? ("DESCENDANTS" as const),
+              }
             : {};
         const yearParams = filters.year
             ? {

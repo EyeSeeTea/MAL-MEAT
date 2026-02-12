@@ -56,7 +56,7 @@ export const PerformanceOverTimeChart: React.FC<PerformanceOverTimeChartProps> =
                     <Credits enabled={false} />
                     {seriesData.map(series => (
                         <Series
-                            key={series.id}
+                            key={`${series.id}-${series.name}`}
                             options={{ name: series.name }}
                             type="line"
                             data={series.data}

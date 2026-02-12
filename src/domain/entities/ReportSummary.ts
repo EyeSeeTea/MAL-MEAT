@@ -41,7 +41,7 @@ export class ReportSummary {
             return sum + percentage;
         }, 0);
 
-        return totalPercentage / this.report.questions.length;
+        return Math.round((totalPercentage / this.report.questions.length) * 100) / 100;
     }
 
     countMajorNonconformities(): number {
