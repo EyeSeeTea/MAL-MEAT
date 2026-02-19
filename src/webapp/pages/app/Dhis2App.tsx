@@ -29,7 +29,7 @@ export function Dhis2App(_props: {}) {
             );
         }
         case "loaded": {
-            const { baseUrl, compositionRoot } = compositionRootRes.data;
+            const { baseUrl, compositionRoot, api } = compositionRootRes.data;
             type ProviderProps = React.ComponentProps<typeof Provider>;
             const config: ProviderProps["config"] = { baseUrl, apiVersion: 30 };
 
@@ -40,7 +40,7 @@ export function Dhis2App(_props: {}) {
                     parentAlertsAdd={() => {}}
                     showAlertsInPlugin={false}
                 >
-                    <App compositionRoot={compositionRoot} />
+                    <App compositionRoot={compositionRoot} api={api} />
                 </Provider>
             );
         }
@@ -49,6 +49,7 @@ export function Dhis2App(_props: {}) {
 
 type Data = {
     compositionRoot: CompositionRoot;
+    api: D2Api;
     baseUrl: string;
 };
 
@@ -56,7 +57,7 @@ async function getData(): Promise<CompositionRootResult> {
     const baseUrl = await getBaseUrl();
 
     const auth = env["VITE_DHIS2_AUTH"];
-    const [username = "", password = ""] = auth.split(":");
+    const [, username = "", password = ""] = auth.match(/(.*):(.*)/) || [];
     const api = auth
         ? new D2Api({ baseUrl: baseUrl, auth: { username, password } })
         : new D2Api({ baseUrl: baseUrl });
@@ -66,7 +67,7 @@ async function getData(): Promise<CompositionRootResult> {
     configI18n(userSettings);
 
     try {
-        return { type: "loaded", data: { baseUrl, compositionRoot } };
+        return { type: "loaded", data: { baseUrl, compositionRoot, api } };
     } catch (err) {
         return { type: "error", error: { baseUrl, error: err as Error } };
     }

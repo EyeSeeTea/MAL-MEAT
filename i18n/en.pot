@@ -5,13 +5,64 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2024-06-26T10:58:19.149Z\n"
-"PO-Revision-Date: 2024-06-26T10:58:19.149Z\n"
+"POT-Creation-Date: 2026-02-11T16:24:42.633Z\n"
+"PO-Revision-Date: 2026-02-11T16:24:42.633Z\n"
+
+msgid "Case Management"
+msgstr ""
+
+msgid "Surveillance"
+msgstr ""
+
+msgid "Current Response"
+msgstr ""
+
+msgid "Explanation"
+msgstr ""
+
+msgid "Previous Scores"
+msgstr ""
+
+msgid "Average score"
+msgstr ""
+
+msgid "show more"
+msgstr ""
+
+msgid "By Domain"
+msgstr ""
+
+msgid "No reports available"
+msgstr ""
 
 msgid "Add"
 msgstr ""
 
 msgid "List"
+msgstr ""
+
+msgid "Total major non-conformities"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Select Organization Units"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Clear"
 msgstr ""
 
 msgid "Back"
@@ -20,11 +71,126 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-msgid "Hello {{name}}"
+msgid "Performance over time graph"
 msgstr ""
 
-msgid "Detail page"
+msgid "Date"
 msgstr ""
 
-msgid "Section"
+msgid "Average Score (%)"
+msgstr ""
+
+msgid "Domain"
+msgstr ""
+
+msgid "All domains"
+msgstr ""
+
+msgid "Level of Audit"
+msgstr ""
+
+msgid "All levels"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "All years"
+msgstr ""
+
+msgid "Reset Filters"
+msgstr ""
+
+msgid "Report Overview"
+msgstr ""
+
+msgid "Edit in Capture"
+msgstr ""
+
+msgid "Organisation Unit"
+msgstr ""
+
+msgid "Audit Level"
+msgstr ""
+
+msgid "Audit Type"
+msgstr ""
+
+msgid "Major non-conformities"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Show Summary Report"
+msgstr ""
+
+msgid "Show Detailed Report"
+msgstr ""
+
+msgid "Loading report details..."
+msgstr ""
+
+msgid "Error loading summary"
+msgstr ""
+
+msgid "An error occurred while loading the report."
+msgstr ""
+
+msgid "Report not found"
+msgstr ""
+
+msgid "The requested report does not exist."
+msgstr ""
+
+msgid "Report Details"
+msgstr ""
+
+msgid "Audit details"
+msgstr ""
+
+msgid "Report Date"
+msgstr ""
+
+msgid "Organization Unit"
+msgstr ""
+
+msgid "Average Score"
+msgstr ""
+
+msgid "Major Nonconformities"
+msgstr ""
+
+msgid "Create Report"
+msgstr ""
+
+msgid "Error loading domain configuration"
+msgstr ""
+
+msgid ""
+"There was an error loading the domains. Please review the metadata "
+"configuration or contact support."
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Loading summary..."
+msgstr ""
+
+msgid "An error occurred while loading the summary."
+msgstr ""
+
+msgid "Summary for {{orgUnitName}}"
+msgstr ""
+
+msgid "Unauthorized"
+msgstr ""
+
+msgid "Access Denied"
+msgstr ""
+
+msgid ""
+"You do not have the necessary permissions to access this application. "
+"Please contact your system administrator for assistance."
 msgstr ""
